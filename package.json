@@ -20,8 +20,9 @@
     "build.wasm": "asc ./src/wasm/index.as.ts -b ./dist/index.wasm --exportRuntime --transform as-bind",
     "build.wasi": "asc ./src/wasi/index.as.ts -b ./dist/wasi.wasm --exportRuntime --transform as-bind",
     "build": "npm run build.node -- --target release",
-    "start.wasi": "wasmtime ./dist/index.wasm",
+    "start.wasi": "wasmtime ./dist/wasi.wasm",
     "start.browser": "servor ./dist/ --browse --reload",
+    "start.node": "node ./dist/node/cli.js",
     "prepare": "npm run build"
   },
   "devDependencies": {
