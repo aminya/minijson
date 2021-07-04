@@ -1,0 +1,258 @@
+{
+  "version": "v1.0.0",
+  "isLatest": true,
+  "html": "https://github.com/solidjs/solid/releases/tag/v1.0.0",
+  "date": "2021-06-28T14:20:59Z",
+  "tar": "https://api.github.com/repos/solidjs/solid/tarball/v1.0.0",
+  "zip": "https://api.github.com/repos/solidjs/solid/zipball/v1.0.0",
+  "sections": [
+    {
+      "slug": "getting-started",
+      "title": "Getting Started",
+      "level": 1,
+      "children": [
+        { "slug": "try-solid", "title": "Try Solid", "level": 2, "children": [] },
+        { "slug": "learn-solid", "title": "Learn Solid", "level": 2, "children": [] },
+        {
+          "slug": "think-solid",
+          "title": "Think Solid",
+          "level": 2,
+          "children": [
+            { "slug": "1.-declarative-data", "title": "1. Declarative Data", "level": 3, "children": [] },
+            { "slug": "2.-vanishing-components", "title": "2. Vanishing Components", "level": 3, "children": [] },
+            { "slug": "3.-read%2Fwrite-segregation", "title": "3. Read/Write segregation", "level": 3, "children": [] },
+            {
+              "slug": "4.-simple-is-better-than-easy",
+              "title": "4. Simple is better than easy",
+              "level": 3,
+              "children": []
+            }
+          ]
+        },
+        { "slug": "web-components", "title": "Web Components", "level": 2, "children": [] },
+        { "slug": "server-rendering", "title": "Server Rendering", "level": 2, "children": [] },
+        { "slug": "no-compilation%3F", "title": "No Compilation?", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "reactivity",
+      "title": "Reactivity",
+      "level": 1,
+      "children": [{ "slug": "introducing-primitives", "title": "Introducing Primitives", "level": 2, "children": [] }]
+    },
+    { "slug": "how-it-works", "title": "How it Works", "level": 1, "children": [] },
+    { "slug": "considerations", "title": "Considerations", "level": 1, "children": [] },
+    {
+      "slug": "rendering",
+      "title": "Rendering",
+      "level": 1,
+      "children": [
+        { "slug": "jsx-compilation", "title": "JSX Compilation", "level": 2, "children": [] },
+        { "slug": "attributes-and-props", "title": "Attributes and Props", "level": 2, "children": [] },
+        { "slug": "entry", "title": "Entry", "level": 2, "children": [] },
+        { "slug": "components", "title": "Components", "level": 2, "children": [] },
+        { "slug": "props", "title": "Props", "level": 2, "children": [] },
+        { "slug": "children", "title": "Children", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "server-side-rendering",
+      "title": "Server Side Rendering",
+      "level": 1,
+      "children": [
+        { "slug": "hydration-script", "title": "Hydration Script", "level": 2, "children": [] },
+        { "slug": "async-and-streaming-ssr", "title": "Async and Streaming SSR", "level": 2, "children": [] },
+        { "slug": "ssr-caveats", "title": "SSR Caveats", "level": 2, "children": [] },
+        { "slug": "getting-started-with-ssr", "title": "Getting Started with SSR", "level": 2, "children": [] },
+        {
+          "slug": "getting-started-with-static-site-generation",
+          "title": "Getting Started with Static Site Generation",
+          "level": 2,
+          "children": []
+        }
+      ]
+    },
+    {
+      "slug": "basic-reactivity",
+      "title": "Basic Reactivity",
+      "level": 1,
+      "children": [
+        { "slug": "createsignal", "title": "createSignal", "level": 2, "children": [] },
+        { "slug": "createeffect", "title": "createEffect", "level": 2, "children": [] },
+        { "slug": "creatememo", "title": "createMemo", "level": 2, "children": [] },
+        { "slug": "createresource", "title": "createResource", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "lifecycles",
+      "title": "Lifecycles",
+      "level": 1,
+      "children": [
+        { "slug": "onmount", "title": "onMount", "level": 2, "children": [] },
+        { "slug": "oncleanup", "title": "onCleanup", "level": 2, "children": [] },
+        { "slug": "onerror", "title": "onError", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "reactive-utilities",
+      "title": "Reactive Utilities",
+      "level": 1,
+      "children": [
+        { "slug": "untrack", "title": "untrack", "level": 2, "children": [] },
+        { "slug": "batch", "title": "batch", "level": 2, "children": [] },
+        { "slug": "on", "title": "on", "level": 2, "children": [] },
+        { "slug": "createroot", "title": "createRoot", "level": 2, "children": [] },
+        { "slug": "mergeprops", "title": "mergeProps", "level": 2, "children": [] },
+        { "slug": "splitprops", "title": "splitProps", "level": 2, "children": [] },
+        { "slug": "usetransition", "title": "useTransition", "level": 2, "children": [] },
+        { "slug": "observable", "title": "observable", "level": 2, "children": [] },
+        { "slug": "maparray", "title": "mapArray", "level": 2, "children": [] },
+        { "slug": "indexarray", "title": "indexArray", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "stores",
+      "title": "Stores",
+      "level": 1,
+      "children": [
+        {
+          "slug": "createstore",
+          "title": "createStore",
+          "level": 2,
+          "children": [
+            { "slug": "getters", "title": "Getters", "level": 3, "children": [] },
+            { "slug": "updating-stores", "title": "Updating Stores", "level": 3, "children": [] }
+          ]
+        },
+        { "slug": "produce", "title": "produce", "level": 2, "children": [] },
+        { "slug": "reconcile", "title": "reconcile", "level": 2, "children": [] },
+        { "slug": "createmutable", "title": "createMutable", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "component-apis",
+      "title": "Component APIs",
+      "level": 1,
+      "children": [
+        { "slug": "createcontext", "title": "createContext", "level": 2, "children": [] },
+        { "slug": "usecontext", "title": "useContext", "level": 2, "children": [] },
+        { "slug": "children", "title": "children", "level": 2, "children": [] },
+        { "slug": "lazy", "title": "lazy", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "secondary-primitives",
+      "title": "Secondary Primitives",
+      "level": 1,
+      "children": [
+        { "slug": "createdeferred", "title": "createDeferred", "level": 2, "children": [] },
+        { "slug": "createcomputed", "title": "createComputed", "level": 2, "children": [] },
+        { "slug": "createrendereffect", "title": "createRenderEffect", "level": 2, "children": [] },
+        { "slug": "createselector", "title": "createSelector", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "rendering",
+      "title": "Rendering",
+      "level": 1,
+      "children": [
+        { "slug": "render", "title": "render", "level": 2, "children": [] },
+        { "slug": "hydrate", "title": "hydrate", "level": 2, "children": [] },
+        { "slug": "rendertostring", "title": "renderToString", "level": 2, "children": [] },
+        { "slug": "rendertostringasync", "title": "renderToStringAsync", "level": 2, "children": [] },
+        { "slug": "pipetonodewritable", "title": "pipeToNodeWritable", "level": 2, "children": [] },
+        { "slug": "pipetowritable", "title": "pipeToWritable", "level": 2, "children": [] },
+        { "slug": "isserver", "title": "isServer", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "control-flow",
+      "title": "Control Flow",
+      "level": 1,
+      "children": [
+        { "slug": "%3Cfor%3E", "title": "<For>", "level": 2, "children": [] },
+        { "slug": "%3Cshow%3E", "title": "<Show>", "level": 2, "children": [] },
+        { "slug": "%3Cswitch%3E%2F%3Cmatch%3E", "title": "<Switch>/<Match>", "level": 2, "children": [] },
+        { "slug": "%3Cindex%3E", "title": "<Index>", "level": 2, "children": [] },
+        { "slug": "%3Cerrorboundary%3E", "title": "<ErrorBoundary>", "level": 2, "children": [] },
+        { "slug": "%3Csuspense%3E", "title": "<Suspense>", "level": 2, "children": [] },
+        {
+          "slug": "%3Csuspenselist%3E-(experimental)",
+          "title": "<SuspenseList> (Experimental)",
+          "level": 2,
+          "children": []
+        },
+        { "slug": "%3Cdynamic%3E", "title": "<Dynamic>", "level": 2, "children": [] },
+        { "slug": "%3Cportal%3E", "title": "<Portal>", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "special-jsx-attributes",
+      "title": "Special JSX Attributes",
+      "level": 1,
+      "children": [
+        { "slug": "ref", "title": "ref", "level": 2, "children": [] },
+        { "slug": "classlist", "title": "classList", "level": 2, "children": [] },
+        { "slug": "style", "title": "style", "level": 2, "children": [] },
+        { "slug": "innerhtml%2Ftextcontent", "title": "innerHTML/textContent", "level": 2, "children": [] },
+        { "slug": "on___", "title": "on___", "level": 2, "children": [] },
+        { "slug": "on%3A___%2Foncapture%3A___", "title": "on:___/oncapture:___", "level": 2, "children": [] },
+        { "slug": "use%3A___", "title": "use:___", "level": 2, "children": [] },
+        { "slug": "prop%3A___", "title": "prop:___", "level": 2, "children": [] },
+        { "slug": "attr%3A___", "title": "attr:___", "level": 2, "children": [] },
+        { "slug": "%2F*-%40once-*%2F", "title": "/* @once */", "level": 2, "children": [] }
+      ]
+    },
+    {
+      "slug": "comparison-with-other-libraries",
+      "title": "Comparison with other Libraries",
+      "level": 1,
+      "children": [
+        {
+          "slug": "react",
+          "title": "React",
+          "level": 2,
+          "children": [
+            { "slug": "advice-for-migrating%3A", "title": "Advice for migrating:", "level": 4, "children": [] }
+          ]
+        },
+        {
+          "slug": "vue",
+          "title": "Vue",
+          "level": 2,
+          "children": [
+            { "slug": "advice-for-migrating%3A-1", "title": "Advice for migrating:", "level": 4, "children": [] }
+          ]
+        },
+        {
+          "slug": "svelte",
+          "title": "Svelte",
+          "level": 2,
+          "children": [
+            { "slug": "advice-for-migrating%3A-2", "title": "Advice for migrating:", "level": 4, "children": [] }
+          ]
+        },
+        {
+          "slug": "knockout.js",
+          "title": "Knockout.js",
+          "level": 2,
+          "children": [
+            { "slug": "advice-for-migrating%3A-3", "title": "Advice for migrating:", "level": 4, "children": [] }
+          ]
+        },
+        {
+          "slug": "lit-%26-lighterhtml",
+          "title": "Lit & LighterHTML",
+          "level": 2,
+          "children": [
+            { "slug": "advice-for-migrating%3A-4", "title": "Advice for migrating:", "level": 4, "children": [] }
+          ]
+        },
+        { "slug": "s.js", "title": "S.js", "level": 2, "children": [] },
+        { "slug": "rxjs", "title": "RxJS", "level": 2, "children": [] },
+        { "slug": "others", "title": "Others", "level": 2, "children": [] }
+      ]
+    },
+    { "slug": "faq", "title": "FAQ", "level": 1, "children": [] }
+  ]
+}
