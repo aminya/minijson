@@ -31,7 +31,7 @@ extern (C) string minify(string jsonString)
     const leftContext = match.pre();
     rightContext = match.post();
 
-    const lastInddex = jsonString.length - rightContext.length - 1;
+    const lastInddex = jsonString.length - rightContext.length;
 
     if (!in_multiline_comment && !in_singleline_comment)
     {
