@@ -17,7 +17,7 @@
     "build.node": "npm run build.wasm && npm run build.ts",
     "build.wasm": "asc ./src/wasm/index.as.ts -b ./dist/index.wasm --exportRuntime --transform as-bind",
     "build.wasi": "asc ./src/wasi/index.as.ts -b ./dist/wasi.wasm --exportRuntime --transform as-bind",
-    "build": "npm run build.wasi -- --target release",
+    "build": "npm run build.node -- --target release",
     "start": "wasmtime ./dist/index.wasm",
     "prepare": "npm run build"
   },
