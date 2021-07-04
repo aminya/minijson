@@ -39,7 +39,7 @@ export function minify(jsonString: string): string {
       }
       new_str.push(leftContextSubstr)
     }
-    from = tokenizer.lastIndex
+    from = lastInddex
 
     const firstMatch = match.matches[0]
     if (firstMatch == '"' && !in_multiline_comment && !in_singleline_comment) {
