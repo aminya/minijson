@@ -32,6 +32,7 @@
     "assemblyscript": "^0.19.5",
     "assemblyscript-regex": "^1.6.4",
     "eslint-config-atomic": "^1.16.1",
+    "jsonminify": "^0.4.1",
     "parcel": "^2.0.0-beta.3.1",
     "prettier-config-atomic": "^2.0.5",
     "servor": "^4.0.2",
