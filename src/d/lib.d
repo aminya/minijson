@@ -25,7 +25,6 @@ extern (C) string minify(string jsonString)
     {
       break;
     }
-    match.popFront();
 
     const matchFrontHit = match.front().hit();
 
@@ -78,6 +77,8 @@ extern (C) string minify(string jsonString)
     {
       new_str.put(matchFrontHit);
     }
+
+    match.popFront();
   }
   new_str.put(rightContext);
   return new_str.array().join("");
