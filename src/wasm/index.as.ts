@@ -2,7 +2,7 @@ import { RegExp, Match } from "assemblyscript-regex"
 
 const tokenizer = new RegExp('"|(/\\*)|(\\*/)|(//)|\\n|\\r|[|]', "g")
 
-const spaceOrBreakRegex = new RegExp("\\s|\\n|\\r")
+const spaceOrBreakRegex = new RegExp("\\s")
 
 const repeatingBackSlashRegex = new RegExp("(\\\\)*$")
 
