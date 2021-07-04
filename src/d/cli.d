@@ -9,15 +9,15 @@ import std.file : readText, write;
 /** Print help */
 void printHelp(GetoptResult optResult)
 {
-  return defaultGetoptPrinter("Usage: minify json files", optResult.options);
+  return defaultGetoptPrinter("Usage: minify json files.\njsonminify -file file1.json -file file2.json",
+      optResult.options);
 }
 
 void main(string[] args)
 {
-
   string[] files;
 
-  auto optResult = getopt(args, "files", "the files to minify", &files);
+  auto optResult = getopt(args, "file", "the json file to minify", &files);
 
   if (optResult.helpWanted || !files)
   {

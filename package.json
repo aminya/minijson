@@ -17,6 +17,7 @@
     "clean": "shx rm -rf dist",
     "build.node": "npm run build.wasm && (tsc -p ./src/node/tsconfig.json || echo done)",
     "build.native": "dub build",
+    "build.native.release": "pnpm build.native -- --build release --compiler=ldc2",
     "build.wasm": "ldc2 ./src/d/wasm.d ./src/d/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
     "build.browser.unit": "npm run build.wasm && (tsc -p ./src/browser/tsconfig.json || echo done) && shx cp -r ./src/browser ./dist",
     "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
