@@ -2,7 +2,7 @@ import { minify, readJsonFile } from "./lib"
 
 async function main() {
   if (process.argv.length <= 2) {
-    throw new Error("The number of arguments passed to wasm-jsonminify is not sufficient")
+    throw new Error("The number of arguments passed to minijson is not sufficient")
   }
   const fileName = process.argv[2]
   const jsonString = await readJsonFile(fileName)
