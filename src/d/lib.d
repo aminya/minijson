@@ -1,3 +1,5 @@
+module jsonminify.lib;
+
 import std : ctRegex, replaceAll, join, appender, array, matchAll, matchFirst, RegexMatch;
 
 const tokenizer = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|[|]`, "g");
@@ -79,8 +81,4 @@ extern (C) string minify(string jsonString)
   }
   new_str.put(rightContext);
   return new_str.array().join("");
-}
-
-extern (C) void _start()
-{
 }
