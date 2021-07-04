@@ -16,7 +16,7 @@
     "inlineSources": true,
     "preserveSymlinks": true,
     "removeComments": false,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "target": "esnext",
     "allowJs": true,
     "esModuleInterop": true,

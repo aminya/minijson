@@ -27,6 +27,29 @@ await minify(`
 `)
 ```
 
+### Browser App
+
+```
+npm install
+npm run build.browser
+npm run start.browser
+```
+
+### Browser API
+
+```
+npm install
+npm run build.browser
+```
+
+```ts
+import { minify } from "./dist/browser/lib.js"
+
+await minify(`
+  {"some_json":   "here"}
+`)
+```
+
 ### Wasm API
 
 Build:
@@ -39,7 +62,7 @@ npm run build.wasm
 `./dist/index.wasm`
 
 ```ts
-export function minify(jsonString: string): string;
+export function minify(jsonString: string): string
 ```
 
 ### Wasi example

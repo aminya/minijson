@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "./dist/node/lib.js",
   "bin": "./dist/node/cli.js",
+  "browser": "./dist/index.html",
   "scripts": {
     "format": "prettier --write .",
     "test.format": "prettier . --check",
@@ -13,12 +14,14 @@
     "test.lint": "eslint .",
     "test": "atom --test spec",
     "clean": "shx rm -rf dist",
-    "build.ts": "tsc -p ./src/node/tsconfig.json || echo done",
-    "build.node": "npm run build.wasm && npm run build.ts",
+    "build.node": "npm run build.wasm && (tsc -p ./src/node/tsconfig.json || echo done)",
+    "build.browser.unit": "npm run build.wasm && (tsc -p ./src/browser/tsconfig.json || echo done) && shx cp -r ./src/browser ./dist",
+    "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
     "build.wasm": "asc ./src/wasm/index.as.ts -b ./dist/index.wasm --exportRuntime --transform as-bind",
     "build.wasi": "asc ./src/wasi/index.as.ts -b ./dist/wasi.wasm --exportRuntime --transform as-bind",
     "build": "npm run build.node -- --target release",
-    "start": "wasmtime ./dist/index.wasm",
+    "start.wasi": "wasmtime ./dist/index.wasm",
+    "start.browser": "servor ./dist/ --browse --reload",
     "prepare": "npm run build"
   },
   "devDependencies": {
@@ -30,8 +33,17 @@
     "assemblyscript-regex": "^1.6.4",
     "eslint-config-atomic": "^1.16.1",
     "prettier-config-atomic": "^2.0.5",
-    "rollup-plugin-atomic": "^2.3.2",
+    "servor": "^4.0.2",
     "shx": "0.3.3"
+  },
+  "targets": {
+    "browser": {
+      "context": "browser",
+      "engines": {
+        "browsers": "Chrome 76"
+      },
+      "includeNodeModules": true
+    }
   },
   "prettier": "prettier-config-atomic"
 }
