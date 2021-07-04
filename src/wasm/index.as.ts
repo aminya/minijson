@@ -43,7 +43,7 @@ export function minify(jsonString: string): string {
     from = tokenizer.lastIndex
 
     const firstMatch = match.matches[0]
-    if (firstMatch === '"' && !in_multiline_comment && !in_singleline_comment) {
+    if (firstMatch == "\"" && !in_multiline_comment && !in_singleline_comment) {
       const lcMatch = repeatingBackSlashRegex.exec(leftContext)
       if (!in_string || lcMatch === null || lcMatch.matches.length % 2 === 0) {
         // start of string with ", or unescaped " character found to end string
