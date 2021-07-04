@@ -1,4 +1,4 @@
-name "jsonminify"
+name "minijson"
 description "Minify JSON files"
 authors "Amin Yahyaabadi"
 copyright "Copyright © 2021, Amin Yahyaabadi"

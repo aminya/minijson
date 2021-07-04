@@ -1,7 +1,6 @@
 import { execFile } from "child_process"
 import { join } from "path"
 
-
 function main() {
   const args = process.argv
 
