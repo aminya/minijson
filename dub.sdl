@@ -1,0 +1,33 @@
+name "jsonminify"
+description "Minify JSON files"
+authors "Amin Yahyaabadi"
+copyright "Copyright © 2021, Amin Yahyaabadi"
+license "MIT"
+
+# ------- dream.exe -----------
+
+targetType "executable"
+targetPath "./dist"
+
+sourcePaths "./src/d"
+importPaths "./src/d"
+
+mainSourceFile "./src/d/cli.d"
+
+# -------- Build Options and configurations --------
+
+// enables all disp except =nosharedaccess
+dflags "-vgc" "-preview=dip25" "-preview=dip1000" "-preview=dip1008" "-preview=fieldwise" "-preview=fixAliasThis" "-preview=intpromote" "-preview=rvaluerefparam" "-preview=in"
+/* dflags "-preview=inclusiveincontracts" platform="dmd" // only on dmd */
+dflags "-preview=dip1021" platform="posix-ldc" //  "-preview=dip1021" breaks the build in other cases
+
+
+buildType "debug-sanitize-address" platform="ldc" {
+  dflags "--fsanitize=address" "--link-defaultlib-debug"
+  buildOptions "debugMode" "debugInfo"
+}
+
+buildType "debug-sanitize-memory" platform="ldc" {
+  dflags "--fsanitize=memory" "--link-defaultlib-debug"
+  buildOptions "debugMode" "debugInfo"
+}
