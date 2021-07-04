@@ -8,7 +8,8 @@ const spaceOrBreakRegex = ctRegex!(`\s`);
 
 const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
-extern (C) string minify(string jsonString)
+/** Minify the given JSON string  */
+string minify(string jsonString)
 {
   auto in_string = false;
   auto in_multiline_comment = false;
@@ -82,4 +83,15 @@ extern (C) string minify(string jsonString)
   }
   new_str.put(rightContext);
   return new_str.array().join("");
+}
+
+/** A C wrapper around minify */
+extern (C) auto c_minify(char* jsonCString)
+{
+  import std : fromStringz, toStringz;
+
+  const string jsonString = fromStringz(jsonCString).idup;
+  const minifiedString = minify(jsonString);
+
+  return toStringz(minifiedString);
 }

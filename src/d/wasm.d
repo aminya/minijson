@@ -1,7 +1,11 @@
 module jsonminify.wasm;
 
-public import jsonminify.lib;
+extern (C): // disable D mangling for wasm exports
 
-extern (C) void _start()
+import jsonminify.lib : c_minify;
+
+alias minify = c_minify;
+
+void _start()
 {
 }
