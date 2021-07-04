@@ -11,8 +11,8 @@ export function minify(jsonString: string): string {
   let in_multiline_comment = false
   let in_singleline_comment = false
   const new_str: string[] = []
-  let str_num = 0
-  let from = 0
+  let str_num: u32 = 0
+  let from: u32 = 0
   let rightContext: string = ""
 
   tokenizer.lastIndex = 0
