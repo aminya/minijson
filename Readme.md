@@ -1,6 +1,6 @@
-# As-JsonMinify
+# wasm-jsonminify
 
-Minify JSON files in WebAssembly. Written in AssemblyScript.
+Minify JSON files in WebAssembly!
 
 ### Node CLI
 
