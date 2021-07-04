@@ -9,7 +9,7 @@ function main(): void {
   const args = commandLine.all()
 
   if (args.length < 2) {
-    throw new Error("The number of arguments passed to wasm-jsonminify is not sufficient")
+    throw new Error("The number of arguments passed to minijson is not sufficient")
   }
 
   // TODO fails to read the file
