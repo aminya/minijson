@@ -11,7 +11,6 @@ export function minify(jsonString: string): string {
   let in_multiline_comment = false
   let in_singleline_comment = false
   const new_str: string[] = []
-  let str_num: u32 = 0
   let from: u32 = 0
   let rightContext: string = ""
 
@@ -38,7 +37,7 @@ export function minify(jsonString: string): string {
         // TODO fix replacement
         leftContextSubstr = leftContextSubstr.replaceAll(" ", "").replaceAll("\r", "").replaceAll("\n", "")
       }
-      new_str[str_num++] = leftContextSubstr
+      new_str.push(leftContextSubstr)
     }
     from = tokenizer.lastIndex
 
@@ -65,9 +64,9 @@ export function minify(jsonString: string): string {
     ) {
       in_singleline_comment = false
     } else if (!in_multiline_comment && !in_singleline_comment && spaceOrBreakRegex.test(firstMatch) === false) {
-      new_str[str_num++] = firstMatch
+      new_str.push(firstMatch)
     }
   }
-  new_str[str_num++] = rightContext
+  new_str.push(rightContext)
   return new_str.join("")
 }
