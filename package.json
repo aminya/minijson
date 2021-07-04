@@ -1,0 +1,33 @@
+{
+  "name": "as-jsonminify",
+  "author": "Amin Yahyaabdi",
+  "version": "0.1.0",
+  "description": "Minify json files fast! Written in AssemblyScript.",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "test.format": "prettier . --check",
+    "lint": "eslint . --fix",
+    "test.lint": "eslint .",
+    "test": "atom --test spec",
+    "clean": "shx rm -rf dist",
+    "build.wasi": "asc ./src/wasi/index.as.ts --exportRuntime --transform as-bind",
+    "build": "npm run build.wasi -- --target release",
+    "start": "wasmtime ./dist/index.wasm",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@assemblyscript/loader": "^0.19.5",
+    "@types/node": "16.0.0",
+    "as-bind": "0.7.1",
+    "as-wasi": "^0.4.6",
+    "assemblyscript": "^0.19.5",
+    "assemblyscript-regex": "^1.6.4",
+    "eslint-config-atomic": "^1.16.1",
+    "prettier-config-atomic": "^2.0.5",
+    "rollup-plugin-atomic": "^2.3.2",
+    "shx": "0.3.3"
+  },
+  "prettier": "prettier-config-atomic"
+}
