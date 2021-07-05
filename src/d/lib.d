@@ -54,17 +54,10 @@ string minify(string jsonString, bool hasComments = false) @safe
     {
       if (matchFrontHit == "\"")
       {
-        if (in_string)
+        if (!in_string || !leftContext.matchFirst(repeatingBackSlashRegex).empty()
+            || !leftContext.matchAll(repeatingBackSlashRegex).captures.length() % 2 == 0)
         {
-          const lcMatch = leftContext.matchAll(repeatingBackSlashRegex);
-          if (lcMatch.empty() || lcMatch.captures.length() % 2 == 0)
-          {
-            // start of string with ", or unescaped " character found to end string
-            in_string = !in_string;
-          }
-        }
-        else
-        {
+          // start of string with ", or unescaped " character found to end string
           in_string = !in_string;
         }
         --from; // include " character in next catch
