@@ -4,8 +4,11 @@
   "version": "0.1.0",
   "description": "Minify JSON files fast! Written in D",
   "license": "MIT",
-  "main": "./dist/node/lib.js",
-  "bin": "./dist/node/cli.js",
+  "files": [
+    "./dist"
+  ],
+  "main": "./dist/lib.js",
+  "bin": "./dist/cli.js",
   "browser": "./dist/index.html",
   "scripts": {
     "format": "prettier --write . && npm run format.d",
@@ -27,7 +30,8 @@
     "start.wasi": "wasmtime ./dist/wasi.wasm",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
   "devDependencies": {
     "@assemblyscript/loader": "^0.19.5",
