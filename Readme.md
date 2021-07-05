@@ -11,7 +11,7 @@ Minify JSON files **fast**! Written in D.
 Nodejs
 
 ```
-npm install minijson
+npm install @aminya/minijson
 ```
 
 Dub
