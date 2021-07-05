@@ -10,6 +10,7 @@ sourcePaths "./src/d"
 importPaths "./src/d"
 
 configuration "executable" {
+  targetType "executable"
   mainSourceFile "./src/d/cli.d"
 }
 

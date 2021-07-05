@@ -12,7 +12,9 @@ npm install minijson
 
 Dub
 ```
-dub fetch minijson
+dub fetch minijson --config=library
+# or
+dub fetch minijson --config=executable
 ```
 
 ### CLI Usage
