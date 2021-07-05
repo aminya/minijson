@@ -9,7 +9,7 @@ const spaceOrBreakRegex = ctRegex!(`\s`);
 const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
 /** Minify the given JSON string  */
-string minify(string jsonString)
+string minify(string jsonString) @safe
 {
   auto in_string = false;
   auto in_multiline_comment = false;

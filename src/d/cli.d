@@ -7,13 +7,13 @@ import std.getopt : getopt, defaultGetoptPrinter, GetoptResult;
 import std.file : readText, write;
 
 /** Print help */
-void printHelp(GetoptResult optResult)
+void printHelp(GetoptResult optResult) @trusted
 {
   return defaultGetoptPrinter("Usage: minify json files.\njsonminify -file file1.json -file file2.json",
       optResult.options);
 }
 
-void main(string[] args)
+void main(string[] args) @trusted
 {
   string[] files;
 
