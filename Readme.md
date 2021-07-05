@@ -4,6 +4,8 @@ Minify JSON files **fast**! Written in D.
 
 4 times faster than jsonminify.
 
+[![CI](https://github.com/aminya/minijson/actions/workflows/CI.yml/badge.svg)](https://github.com/aminya/minijson/actions/workflows/CI.yml)
+
 ### Installation
 
 Nodejs
