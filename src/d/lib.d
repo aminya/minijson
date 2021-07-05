@@ -29,13 +29,8 @@ string minify(string jsonString, bool hasComments = false) @safe
 
   auto match = jsonString.matchAll(tokenizer);
 
-  while (true)
+  while (!match.empty())
   {
-    if (match.empty())
-    {
-      break;
-    }
-
     const matchFrontHit = match.front().hit();
 
     const leftContext = match.pre();
