@@ -1,7 +1,7 @@
 import { performance } from "perf_hooks"
 import { minijson } from "../dist/lib.js"
 
-const jsonFiles = ["./benchmark/fixture2.json"]
+import { jsonFiles } from "./fixtures.mjs"
 
 const t1 = performance.now()
 

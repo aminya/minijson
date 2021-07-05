@@ -2,6 +2,8 @@
 
 Minify JSON files **fast**! Written in D.
 
+4 times faster than jsonminify.
+
 ### Installation
 
 Nodejs
@@ -38,6 +40,16 @@ await minify(["file1.json", "file2.json"])
 import minijson: minify;
 
 minify(["file1.json", "file2.json"]);
+```
+
+### Benchmarks
+
+```
+❯ node .\benchmark\node-lib-benchmark.mjs
+14,259 ms
+
+❯ node .\benchmark\js-benchmark.mjs
+58,686 ms
 ```
 
 ### Contributing
