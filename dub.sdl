@@ -1,16 +1,23 @@
-name "jsonminify"
+name "minijson"
 description "Minify JSON files"
 authors "Amin Yahyaabadi"
 copyright "Copyright © 2021, Amin Yahyaabadi"
 license "MIT"
 
-targetType "executable"
 targetPath "./dist"
 
 sourcePaths "./src/d"
 importPaths "./src/d"
 
-mainSourceFile "./src/d/cli.d"
+configuration "executable" {
+  mainSourceFile "./src/d/cli.d"
+}
+
+configuration "library" {
+  targetType "library"
+  targetName "minijson"
+  excludedSourceFiles "./src/d/cli.d"
+}
 
 # -------- Build Options and configurations --------
 

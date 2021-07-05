@@ -2,17 +2,46 @@
 
 Minify JSON files **fast**! Written in D.
 
-### Usage
+
+### Installation
+
+Nodejs
+```
+npm install minijson
+```
+
+Dub
+```
+dub fetch minijson
+```
+
+### CLI Usage
 
 ```
-jsonminify --file file1.json --file file2.json
+minijson --file file1.json --file file2.json
 ```
 
-### Build
+### Node API
+
+```js
+import { minify } from "minijson"
+
+minify(["file1.json", "file2.json"])
+```
+
+### D API
+
+```js
+import minijson: minify;
+
+minify(["file1.json", "file2.json"]);
+```
+
+### Contributing
 
 ```
 pnpm install
-pnpm run build.native
+pnpm run build.node
 ```
 
 ### License

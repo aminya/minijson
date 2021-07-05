@@ -4,8 +4,11 @@
   "version": "0.1.0",
   "description": "Minify JSON files fast! Written in D",
   "license": "MIT",
-  "main": "./dist/node/lib.js",
-  "bin": "./dist/node/cli.js",
+  "files": [
+    "./dist"
+  ],
+  "main": "./dist/lib.js",
+  "bin": "./dist/cli.js",
   "browser": "./dist/index.html",
   "scripts": {
     "format": "prettier --write . && npm run format.d",
@@ -15,9 +18,10 @@
     "test.lint": "eslint .",
     "test": "atom --test spec",
     "clean": "shx rm -rf dist",
-    "build.node": "npm run build.wasm && (tsc -p ./src/node/tsconfig.json || echo done)",
     "build.native": "dub build",
     "build.native.release": "pnpm build.native -- --build release --compiler=ldc2",
+    "build.node": "npm run build.native.release && node ./src/d-node/build.js && (tsc -p ./src/d-node/tsconfig.json || echo done)",
+    "build.as.node": "npm run build.wasm && (tsc -p ./src/as-node/tsconfig.json || echo done)",
     "build.wasm": "ldc2 ./src/d/wasm.d ./src/d/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
     "build.browser.unit": "npm run build.wasm && (tsc -p ./src/browser/tsconfig.json || echo done) && shx cp -r ./src/browser ./dist",
     "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
@@ -26,7 +30,8 @@
     "start.wasi": "wasmtime ./dist/wasi.wasm",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
   "devDependencies": {
     "@assemblyscript/loader": "^0.19.5",
