@@ -43,7 +43,8 @@ string minify(string jsonString, bool hasComments = false) @safe
 
     const lastInddex = jsonString.length - rightContext.length;
 
-    if (!in_multiline_comment && !in_singleline_comment)
+    const noCommentOrNotInComment = !hasComments || !in_multiline_comment && !in_singleline_comment;
+    if (noCommentOrNotInComment)
     {
       auto leftContextSubstr = leftContext[from .. $];
       if (!in_string)
@@ -54,38 +55,47 @@ string minify(string jsonString, bool hasComments = false) @safe
     }
     from = lastInddex;
 
-    if (matchFrontHit == "\"" && !in_multiline_comment && !in_singleline_comment)
+    if (noCommentOrNotInComment)
     {
-      const lcMatch = leftContext.matchAll(repeatingBackSlashRegex);
-      if (!in_string || lcMatch.empty() || lcMatch.captures.length() % 2 == 0)
+      if (matchFrontHit == "\"")
       {
-        // start of string with ", or unescaped " character found to end string
-        in_string = !in_string;
+        const lcMatch = leftContext.matchAll(repeatingBackSlashRegex);
+        if (!in_string || lcMatch.empty() || lcMatch.captures.length() % 2 == 0)
+        {
+          // start of string with ", or unescaped " character found to end string
+          in_string = !in_string;
+        }
+        --from; // include " character in next catch
+        rightContext = jsonString[from .. $];
       }
-      --from; // include " character in next catch
-      rightContext = jsonString[from .. $];
+      else if (matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
+      {
+        new_str.put(matchFrontHit);
+      }
     }
-    else if (matchFrontHit == "/*" && !in_string && !in_multiline_comment && !in_singleline_comment)
+    // comments
+    if (hasComments && !in_string)
     {
-      in_multiline_comment = true;
-    }
-    else if (matchFrontHit == "*/" && !in_string && in_multiline_comment && !in_singleline_comment)
-    {
-      in_multiline_comment = false;
-    }
-    else if (matchFrontHit == "//" && !in_string && !in_multiline_comment && !in_singleline_comment)
-    {
-      in_singleline_comment = true;
-    }
-    else if ((matchFrontHit == "\n" || matchFrontHit == "\r") && !in_string
-        && !in_multiline_comment && in_singleline_comment)
-    {
-      in_singleline_comment = false;
-    }
-    else if (!in_multiline_comment && !in_singleline_comment
-        && matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
-    {
-      new_str.put(matchFrontHit);
+      if (!in_multiline_comment && !in_singleline_comment)
+      {
+        if (matchFrontHit == "/*")
+        {
+          in_multiline_comment = true;
+        }
+        else if (matchFrontHit == "//")
+        {
+          in_singleline_comment = true;
+        }
+      }
+      else if (in_multiline_comment && !in_singleline_comment && matchFrontHit == "*/")
+      {
+        in_multiline_comment = false;
+      }
+      else if (!in_multiline_comment && in_singleline_comment
+          && (matchFrontHit == "\n" || matchFrontHit == "\r"))
+      {
+        in_singleline_comment = false;
+      }
     }
 
     match.popFront();
