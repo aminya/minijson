@@ -11,15 +11,19 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
           - windows-latest
           - macos-latest
         d:
-          - "ldc-latest"
+          - "ldc-beta"
         node:
           - 16
         pnpm:
           - 6
+        include:
+        - os: ubuntu-latest
+          d: dmd-latest
+          node: 16
+          pnpm: 6
     steps:
       - uses: actions/checkout@v2
 
