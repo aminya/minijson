@@ -26,7 +26,7 @@ minijson --file file1.json --file file2.json
 ```js
 import { minify } from "minijson"
 
-minify(["file1.json", "file2.json"])
+await minify(["file1.json", "file2.json"])
 ```
 
 ### D API

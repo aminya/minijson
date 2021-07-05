@@ -1,8 +1,10 @@
 import { minijson } from "./lib"
 
-function main() {
+async function main() {
   const args = process.argv
-  minijson(args, false)
+  await minijson(args, false)
 }
 
-main()
+main().catch(e => {
+  throw e
+})
