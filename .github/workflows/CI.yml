@@ -20,10 +20,10 @@ jobs:
         pnpm:
           - 6
         include:
-        - os: ubuntu-latest
-          d: dmd-latest
-          node: 16
-          pnpm: 6
+          - os: ubuntu-latest
+            d: dmd-latest
+            node: 16
+            pnpm: 6
     steps:
       - uses: actions/checkout@v2
 
