@@ -18,9 +18,24 @@ dub fetch minijson
 ### CLI Usage
 
 ```
-jsonminify --file file1.json --file file2.json
+minijson --file file1.json --file file2.json
 ```
 
+### Node API
+
+```js
+import { minify } from "minijson"
+
+minify(["file1.json", "file2.json"])
+```
+
+### D API
+
+```js
+import minijson: minify;
+
+minify(["file1.json", "file2.json"]);
+```
 
 ### Contributing
 
