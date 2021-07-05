@@ -21,16 +21,19 @@ export function minijson(files: string[], splice = true) {
       args.splice(iSplice, 0, "--file")
     }
   }
-
-  execFile(minijsonBin, args, (err, stdout, stderr) => {
-    if (err) {
-      throw err
-    }
-    if (stderr !== "") {
-      console.error(stderr)
-    }
-    if (stdout !== "") {
-      console.log(stdout)
-    }
+  return new Promise<void>((resolve, reject) => {
+    execFile(minijsonBin, args, (err, stdout, stderr) => {
+      if (err) {
+        reject(err)
+      }
+      if (stderr !== "") {
+        console.error(stderr)
+        reject()
+      }
+      if (stdout !== "") {
+        console.log(stdout)
+      }
+      resolve()
+    })
   })
 }

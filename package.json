@@ -18,7 +18,7 @@
     "test.lint": "eslint .",
     "test": "atom --test spec",
     "clean": "shx rm -rf dist",
-    "build.native": "dub build",
+    "build.native": "dub build --config=executable",
     "build.native.release": "pnpm build.native -- --build release --compiler=ldc2",
     "build.node": "npm run build.native.release && node ./src/d-node/build.js && (tsc -p ./src/d-node/tsconfig.json || echo done)",
     "build.as.node": "npm run build.wasm && (tsc -p ./src/as-node/tsconfig.json || echo done)",

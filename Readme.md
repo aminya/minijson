@@ -12,7 +12,9 @@ npm install minijson
 
 Dub
 ```
-dub fetch minijson
+dub fetch minijson --config=library
+# or
+dub fetch minijson --config=executable
 ```
 
 ### CLI Usage
@@ -26,7 +28,7 @@ minijson --file file1.json --file file2.json
 ```js
 import { minify } from "minijson"
 
-minify(["file1.json", "file2.json"])
+await minify(["file1.json", "file2.json"])
 ```
 
 ### D API
