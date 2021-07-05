@@ -13,3 +13,4 @@ package-lock.json
 dist
 .parcel-cache
 .dub
+trace.*
