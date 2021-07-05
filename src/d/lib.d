@@ -8,8 +8,18 @@ const spaceOrBreakRegex = ctRegex!(`\s`);
 
 const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
-/** Minify the given JSON string  */
-string minify(string jsonString) @safe
+/**
+  Minify the given JSON string
+
+  Params:
+    jsonString  = the json string you want to minify
+    hasComments = a switch that indicates if the json string has comments.
+                  Passing `false` can result in higher performance. Default: `true`.
+
+  Return:
+    the minified json string
+*/
+string minify(string jsonString, bool hasComments = true) @safe
 {
   auto in_string = false;
   auto in_multiline_comment = false;
