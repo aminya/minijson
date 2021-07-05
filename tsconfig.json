@@ -26,6 +26,5 @@
     "importHelpers": false,
     "outDir": "./dist"
   },
-  "compileOnSave": false,
-  "exclude": ["./**/*.as.ts"]
+  "compileOnSave": false
 }
