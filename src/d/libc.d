@@ -9,13 +9,12 @@ extern (C):
 
   Params:
     jsonString  = the json string you want to minify
-    hasComments = a switch that indicates if the json string has comments.
-                  Passing `false` can result in higher performance. Default: `true`.
+    hasComments = a switch that indicates if the json string has comments. Pass `true` to support parsing comments. Default: `false`.
 
   Return:
     the minified json string
 */
-auto minify(char* jsonCString, bool hasComments = true)
+auto minify(char* jsonCString, bool hasComments = false)
 {
   import std : fromStringz, toStringz;
 

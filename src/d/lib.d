@@ -13,13 +13,12 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
   Params:
     jsonString  = the json string you want to minify
-    hasComments = a switch that indicates if the json string has comments.
-                  Passing `false` can result in higher performance. Default: `true`.
+    hasComments = a switch that indicates if the json string has comments. Pass `true` to support parsing comments. Default: `false`.
 
   Return:
     the minified json string
 */
-string minify(string jsonString, bool hasComments = true) @safe
+string minify(string jsonString, bool hasComments = false) @safe
 {
   auto in_string = false;
   auto in_multiline_comment = false;
