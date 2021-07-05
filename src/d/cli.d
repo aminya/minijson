@@ -1,6 +1,6 @@
-module jsonminify.cli;
+module minijson.cli;
 
-import jsonminify.lib : minify;
+import minijson.lib : minify;
 
 import std.parallelism : parallel;
 import std.getopt : getopt, defaultGetoptPrinter, GetoptResult;
@@ -9,7 +9,7 @@ import std.file : readText, write;
 /** Print help */
 void printHelp(GetoptResult optResult) @trusted
 {
-  return defaultGetoptPrinter("Usage: minify json files.\njsonminify -file file1.json -file file2.json",
+  return defaultGetoptPrinter("Usage: minify json files.\nminijson -file file1.json -file file2.json",
       optResult.options);
 }
 

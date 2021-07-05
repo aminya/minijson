@@ -5,6 +5,6 @@ async function main() {
   await minijson(args, false)
 }
 
-main().catch(e => {
+main().catch((e) => {
   throw e
 })

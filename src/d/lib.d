@@ -1,4 +1,4 @@
-module jsonminify.lib;
+module minijson.lib;
 
 import std : ctRegex, replaceAll, join, appender, array, matchAll, matchFirst, RegexMatch;
 
@@ -83,15 +83,4 @@ string minify(string jsonString) @safe
   }
   new_str.put(rightContext);
   return new_str.array().join("");
-}
-
-/** A C wrapper around minify */
-extern (C) auto c_minify(char* jsonCString)
-{
-  import std : fromStringz, toStringz;
-
-  const string jsonString = fromStringz(jsonCString).idup;
-  const minifiedString = minify(jsonString);
-
-  return toStringz(minifiedString);
 }

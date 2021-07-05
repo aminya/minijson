@@ -2,15 +2,16 @@
 
 Minify JSON files **fast**! Written in D.
 
-
 ### Installation
 
 Nodejs
+
 ```
 npm install minijson
 ```
 
 Dub
+
 ```
 dub fetch minijson --config=library
 # or
