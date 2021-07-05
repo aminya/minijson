@@ -38,7 +38,7 @@ string minify(string jsonString, bool hasComments = false) @safe
 
     const lastInddex = jsonString.length - rightContext.length;
 
-    const noCommentOrNotInComment = !hasComments || !in_multiline_comment && !in_singleline_comment;
+    const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
     if (noCommentOrNotInComment)
     {
       auto leftContextSubstr = leftContext[from .. $];
@@ -86,8 +86,7 @@ string minify(string jsonString, bool hasComments = false) @safe
       {
         in_multiline_comment = false;
       }
-      else if (!in_multiline_comment && in_singleline_comment
-          && (matchFrontHit == "\n" || matchFrontHit == "\r"))
+      else if (!in_multiline_comment && in_singleline_comment && (matchFrontHit == "\n" || matchFrontHit == "\r"))
       {
         in_singleline_comment = false;
       }

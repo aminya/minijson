@@ -9,8 +9,8 @@ import std.file : readText, write;
 /** Print help */
 void printHelp(GetoptResult optResult) @trusted
 {
-  return defaultGetoptPrinter("Usage: minify json files.\nminijson --file file1.json --file file2.json",
-      optResult.options);
+  return defaultGetoptPrinter("Usage: minify json files.\nminijson --file file1.json --file file2.json", optResult
+      .options);
 }
 
 void main(string[] args) @trusted
