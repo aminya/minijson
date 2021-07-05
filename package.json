@@ -31,7 +31,6 @@
     "start.wasi": "wasmtime ./dist/wasi.wasm",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
-    "prepare": "npm run build",
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
   "devDependencies": {
