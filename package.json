@@ -1,11 +1,11 @@
 {
   "name": "@aminya/minijson",
   "author": "Amin Yahyaabdi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Minify JSON files fast! Written in D",
   "license": "MIT",
   "files": [
-    "./dist"
+    "dist/**/*"
   ],
   "main": "./dist/lib.js",
   "bin": "./dist/cli.js",
