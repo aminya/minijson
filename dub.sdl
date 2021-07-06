@@ -17,7 +17,6 @@ configuration "executable" {
 configuration "library" {
   targetType "library"
   targetName "minijson"
-  excludedSourceFiles "./src/native/cli.d"
 }
 
 # -------- Build Options and configurations --------
