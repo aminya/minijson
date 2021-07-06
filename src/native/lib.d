@@ -100,5 +100,5 @@ string minify(string jsonString, bool hasComments = false) @safe
 bool leftContextRepeatingBackSlashRegex(string leftContext) @safe
 {
   auto leftContextMatch = leftContext.matchAll(repeatingBackSlashRegex);
-  return !leftContextMatch.empty() || !(leftContextMatch.captures().length() % 2 == 0);
+  return leftContextMatch.empty() || (leftContextMatch.captures().length() % 2 == 0);
 }
