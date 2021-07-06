@@ -1,12 +1,10 @@
 import { readFile, copyFile, rm } from "fs/promises"
-import { join } from "path"
 import { minijson } from "../dist/lib.js"
 
-const fixtureDir = "./test/fixtures"
-
-export async function minifyFixture(fixtureName) {
-  const originalFile = join(fixtureDir, `${fixtureName}.json`)
-  const minifiedFile = join(fixtureDir, `${fixtureName}-minified.json`)
+export async function minifyFixture(fixture) {
+  const fixtureName = fixture.slice(0, fixture.length - 5)
+  const originalFile = `${fixtureName}.json`
+  const minifiedFile = `${fixtureName}-minified.json`
   await copyFile(originalFile, minifiedFile)
 
   const jsonString = await readFile(originalFile, "utf8")

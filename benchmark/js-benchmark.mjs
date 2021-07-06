@@ -2,7 +2,7 @@ import { readFile, writeFile } from "fs/promises"
 import { performance } from "perf_hooks"
 import jsonMinify from "jsonminify"
 
-import { jsonFiles } from "./fixtures.mjs"
+import { jsonFiles } from "../test/fixtures.mjs"
 
 // warmup
 const tmp = await jsonMinify("{}")
