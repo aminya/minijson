@@ -13,7 +13,7 @@ jobs:
         os:
           - windows-latest
           - macos-latest
-          - ubuntu-latest
+          # - ubuntu-latest # https://github.com/ldc-developers/ldc/issues/3780
         d:
           - "ldc-beta"
         node:
