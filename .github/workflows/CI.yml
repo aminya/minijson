@@ -13,13 +13,17 @@ jobs:
         os:
           - windows-latest
           - macos-latest
+          - ubuntu-latest
         d:
           - "ldc-beta"
         node:
           - 16
         pnpm:
           - 6
+        clang:
+          - 12
         include:
+          # dmd
           - os: ubuntu-latest
             d: dmd-latest
             node: 16
@@ -38,9 +42,18 @@ jobs:
             ~/.pnpm-store
             D:\.pnpm-store
             ./.dub
-          key: "cache-D:${{ matrix.d }}-OS:${{ matrix.os }}"
+            ./llvm
+            C:/Program Files/LLVM
+          key: "cache-D:${{ matrix.d }}-OS:${{ matrix.os }}-Clang:${{ matrix.clang }}"
 
       # Setup compilers and tools
+
+      - name: Setup LLVM
+        if: contains(matrix.os, 'ubuntu') && matrix.clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: ${{ matrix.clang }}
+          cached: ${{ steps.cache.outputs.cache-hit }}
 
       - name: Setup Node
         uses: actions/setup-node@v2
