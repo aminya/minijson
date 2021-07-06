@@ -1,21 +1,32 @@
-import { readFile, copyFile, rm } from "fs/promises"
+import { readFile, copyFile } from "fs/promises"
 import { minijson } from "../dist/lib.js"
 
-export async function minifyFixture(fixture) {
-  const fixtureName = fixture.slice(0, fixture.length - 5)
-  const originalFile = `${fixtureName}.json`
-  const minifiedFile = `${fixtureName}-minified.json`
-  await copyFile(originalFile, minifiedFile)
+export async function minifyFixtures(jsonFiles) {
+  const pathInfo = jsonFiles.map((jsonFile) => {
+    const fixtureName = jsonFile.slice(0, jsonFile.length - 5)
+    const originalFile = `${fixtureName}.json`
+    const minifiedFile = `${fixtureName}-minified.json`
+    return { originalFile, minifiedFile }
+  })
+  const originalInfo = await Promise.all(
+    pathInfo.map(async ({ originalFile, minifiedFile }) => {
+      await copyFile(originalFile, minifiedFile)
+      const originalString = await readFile(originalFile, "utf8")
+      const originalObject = JSON.parse(originalString)
+      return { originalString, originalObject }
+    })
+  )
 
-  const jsonString = await readFile(originalFile, "utf8")
-  const jsonObject = JSON.parse(jsonString)
+  const minifiedFiles = pathInfo.map((pathInfo) => pathInfo.minifiedFile)
+  await minijson(minifiedFiles)
 
-  await minijson([minifiedFile])
+  const resultInfo = await Promise.all(
+    minifiedFiles.map(async (minifiedFile) => {
+      const minifiedString = await readFile(minifiedFile, "utf8")
+      const minifiedObject = JSON.parse(minifiedString)
+      return { minifiedString, minifiedObject }
+    })
+  )
 
-  const minifiedString = await readFile(minifiedFile, "utf8")
-  const minifiedObject = JSON.parse(minifiedString)
-
-  await rm(minifiedFile)
-
-  return { jsonString, jsonObject, minifiedString, minifiedObject }
+  return { pathInfo, originalInfo, resultInfo }
 }
