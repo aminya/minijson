@@ -14,3 +14,5 @@ dist
 .parcel-cache
 .dub
 trace.*
+
+test/fixtures/*-minified.json
