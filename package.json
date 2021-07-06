@@ -17,7 +17,7 @@
     "test.format": "prettier . --check",
     "lint": "eslint . --fix",
     "test.lint": "eslint .",
-    "test": "atom --test spec",
+    "test": "jasmine ./test/index.mjs",
     "clean": "shx rm -rf dist",
     "build.native": "dub build --config=executable",
     "build.native.release": "pnpm build.native -- --build release",
@@ -31,8 +31,10 @@
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
   "devDependencies": {
+    "@types/jasmine": "^3.7.7",
     "@types/node": "16.0.0",
     "eslint-config-atomic": "^1.16.1",
+    "jasmine": "^3.8.0",
     "jsonminify": "^0.4.1",
     "parcel": "^2.0.0-beta.3.1",
     "prettier-config-atomic": "^2.0.5",
