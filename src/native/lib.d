@@ -37,20 +37,18 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
   {
     const matchFrontHit = match.front().hit();
 
-    const leftContext = match.pre();
     rightContext = match.post();
 
-    const lastIndex = jsonString.length - rightContext.length;
-
-    auto leftContextSubstr = leftContext[from .. $];
-
     // update from for the next iteration
-    from = lastIndex;
+    const prevFrom = from;
+    from = jsonString.length - rightContext.length; // lastIndex
 
     const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
 
     if (noCommentOrNotInComment)
     {
+      auto leftContextSubstr = match.pre()[prevFrom .. $];
+
       if (!in_string)
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
