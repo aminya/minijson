@@ -7,8 +7,6 @@ const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
 const spaceOrBreakRegex = ctRegex!(`\s`);
 
-const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
-
 /**
   Minify the given JSON string
 
@@ -48,22 +46,24 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
     if (noCommentOrNotInComment)
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
-
-      if (!in_string)
+      if (leftContextSubstr.length != 0)
       {
-        leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
-      }
-      result ~= leftContextSubstr;
-
-      if (matchFrontHit == "\"")
-      {
-        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+        if (!in_string)
         {
-          // start of string with ", or unescaped " character found to end string
-          in_string = !in_string;
+          leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
         }
-        --from; // include " character in next catch
-        rightContext = jsonString[from .. $];
+        result ~= leftContextSubstr;
+
+        if (matchFrontHit == "\"")
+        {
+          if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+          {
+            // start of string with ", or unescaped " character found to end string
+            in_string = !in_string;
+          }
+          --from; // include " character in next catch
+          rightContext = jsonString[from .. $];
+        }
       }
     }
     // comments
@@ -103,11 +103,22 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
   return result;
 }
 
-private bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
+private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe @nogc
 {
-  auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
-  // if not matched the hit length will be 0 (== leftContextMatch.empty())
-  return leftContextMatch.hit().length % 2 == 0;
+  size_t slashCount = 0;
+
+  // NOTE leftContextSubstr.length is not 0 (checked outside of the function)
+  size_t index = leftContextSubstr.length - 1;
+
+  // loop over the string backwards and find `\`
+  while (leftContextSubstr[index] == '\\')
+  {
+    slashCount += 1;
+
+    index -= 1;
+  }
+  // no slash or even number of slashes
+  return slashCount % 2 == 0;
 }
 
 private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
