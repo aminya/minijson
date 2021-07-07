@@ -70,7 +70,7 @@ minifyFiles(["file1.json", "file2.json"]);
 
 ```
 ❯ node .\benchmark\native-benchmark.mjs
-1.086 seconds
+1.066 seconds
 
 ❯ node .\benchmark\js-benchmark.mjs
 58.686 seconds

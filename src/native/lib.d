@@ -42,9 +42,13 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
 
     const lastIndex = jsonString.length - rightContext.length;
 
+    auto leftContextSubstr = leftContext[from .. $];
+
+    // update from for the next iteration
+    from = lastIndex;
+
     const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
 
-    auto leftContextSubstr = leftContext[from .. $];
     if (noCommentOrNotInComment)
     {
       if (!in_string)
@@ -52,11 +56,7 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
       }
       new_str ~= leftContextSubstr;
-    }
-    from = lastIndex;
 
-    if (noCommentOrNotInComment)
-    {
       if (matchFrontHit == "\"")
       {
         if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
