@@ -36,7 +36,7 @@ string minify(string jsonString, bool hasComments = false) @safe
     const leftContext = match.pre();
     rightContext = match.post();
 
-    const lastInddex = jsonString.length - rightContext.length;
+    const lastIndex = jsonString.length - rightContext.length;
 
     const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
     if (noCommentOrNotInComment)
@@ -48,13 +48,13 @@ string minify(string jsonString, bool hasComments = false) @safe
       }
       new_str.put(leftContextSubstr);
     }
-    from = lastInddex;
+    from = lastIndex;
 
     if (noCommentOrNotInComment)
     {
       if (matchFrontHit == "\"")
       {
-        if (!in_string || leftContextRepeatingBackSlashRegex(leftContext))
+        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContext))
         {
           // start of string with ", or unescaped " character found to end string
           in_string = !in_string;
@@ -97,8 +97,8 @@ string minify(string jsonString, bool hasComments = false) @safe
   return new_str.array().join("");
 }
 
-bool leftContextRepeatingBackSlashRegex(string leftContext) @safe
+bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 {
   auto leftContextMatch = leftContext.matchAll(repeatingBackSlashRegex);
-  return leftContextMatch.empty() || (leftContextMatch.captures().length() % 2 == 0);
+  return leftContextMatch.empty() || (leftContextMatch.hit().length % 2 == 0);
 }
