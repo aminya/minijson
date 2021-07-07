@@ -29,7 +29,7 @@ export async function minifyFixtures(jsonFiles, hasComment) {
   await minifyFiles(minifiedFiles, hasComment)
 
   const t2 = performance.now()
-  console.log("Minifying took:", Math.round(t2 - t1), "ms")
+  console.log("Minifying took:", ((t2 - t1) / 1000).toFixed(3), "seconds")
 
   const resultInfo = await Promise.all(
     minifiedFiles.map(async (minifiedFile) => {
