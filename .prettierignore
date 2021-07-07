@@ -3,3 +3,4 @@ pnpm-lock.yaml
 package-lock.json
 CHANGELOG.md
 dist
+test/fixtures/*-minified.json
