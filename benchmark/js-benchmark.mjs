@@ -18,4 +18,4 @@ await Promise.all(
 )
 
 const t2 = performance.now()
-console.log(t2 - t1)
+console.log(((t2 - t1)/1000).toFixed(3), "seconds")

@@ -43,9 +43,10 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
     const lastIndex = jsonString.length - rightContext.length;
 
     const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
+
+    auto leftContextSubstr = leftContext[from .. $];
     if (noCommentOrNotInComment)
     {
-      auto leftContextSubstr = leftContext[from .. $];
       if (!in_string)
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
@@ -58,7 +59,7 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
     {
       if (matchFrontHit == "\"")
       {
-        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContext))
+        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
         {
           // start of string with ", or unescaped " character found to end string
           in_string = !in_string;
