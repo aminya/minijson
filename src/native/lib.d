@@ -104,7 +104,8 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
 bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 {
   auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
-  return leftContextMatch.empty() || (leftContextMatch.hit().length % 2 == 0);
+  // if not matched the hit length will be 0 (== leftContextMatch.empty())
+  return leftContextMatch.hit().length % 2 == 0;
 }
 
 /**
