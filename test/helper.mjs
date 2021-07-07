@@ -1,5 +1,6 @@
 import { readFile, copyFile } from "fs/promises"
 import { minijson } from "../dist/lib.js"
+import { performance } from "perf_hooks"
 
 export async function minifyFixtures(jsonFiles) {
   const pathInfo = jsonFiles.map((jsonFile) => {
@@ -18,7 +19,13 @@ export async function minifyFixtures(jsonFiles) {
   )
 
   const minifiedFiles = pathInfo.map((pathInfo) => pathInfo.minifiedFile)
+
+  const t1 = performance.now()
+
   await minijson(minifiedFiles)
+
+  const t2 = performance.now()
+  console.log("Minifying took:", Math.round(t2 - t1), "ms")
 
   const resultInfo = await Promise.all(
     minifiedFiles.map(async (minifiedFile) => {
