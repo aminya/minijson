@@ -39,9 +39,13 @@ await minifyFiles(["file1.json", "file2.json"])
 ### D API
 
 ```js
-import minijson: minifyString;
+import minijson: minifyString, minifyFiles;
 
-minifyString(`{"some_json": "here"}`);
+// minify the given string
+const minifiedString = minifyString(`{"some_json": "here"}`);
+
+// minify the files in-place and in parallel
+minifyFiles(["file1.json", "file2.json"]);
 ```
 
 ### Benchmarks

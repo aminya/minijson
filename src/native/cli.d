@@ -1,10 +1,8 @@
 module minijson.cli;
 
-import minijson.lib : minifyString;
+import minijson.lib : minifyFiles;
 
-import std.parallelism : parallel;
 import std.getopt : getopt, defaultGetoptPrinter, GetoptResult;
-import std.file : readText, write;
 
 /** Print help */
 void printHelp(GetoptResult optResult) @trusted
@@ -24,10 +22,5 @@ void main(string[] args) @trusted
     return printHelp(optResult);
   }
 
-  foreach (ref file; files.parallel())
-  {
-    const string jsonString = readText(file);
-    const minifiedJsonString = minifyString(jsonString);
-    write(file, minifiedJsonString);
-  }
+  minifyFiles(files);
 }

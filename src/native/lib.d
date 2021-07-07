@@ -102,3 +102,22 @@ bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
   auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
   return leftContextMatch.empty() || (leftContextMatch.hit().length % 2 == 0);
 }
+
+/**
+  Minify the given files in place. It minifies the files in parallel.
+
+  Params:
+    files = the paths to the files.
+*/
+void minifyFiles(string[] files)
+{
+  import std.parallelism : parallel;
+  import std.file : readText, write;
+
+  foreach (ref file; files.parallel())
+  {
+    const string jsonString = readText(file);
+    const minifiedJsonString = minifyString(jsonString);
+    write(file, minifiedJsonString);
+  }
+}
