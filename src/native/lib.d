@@ -93,7 +93,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         in_singleline_comment = false;
       }
     }
-    if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
+    else if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
       result ~= matchFrontHit;
     }
