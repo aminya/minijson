@@ -1,4 +1,5 @@
 import { minifyFixtures } from "./helper.mjs"
+import { minifyFiles, minifyString } from "../dist/lib.js"
 import { jsonFiles } from "./fixtures.mjs"
 import { rm } from "fs/promises"
 
@@ -6,15 +7,31 @@ import { rm } from "fs/promises"
 const { pathInfo, originalInfo, resultInfo } = await minifyFixtures(jsonFiles)
 
 describe("minijson", () => {
-  // expects
-  const fixtureNum = pathInfo.length
-  for (let iFixture = 0; iFixture !== fixtureNum; ++iFixture) {
-    it(pathInfo[iFixture].originalFile, () => {
-      expect(resultInfo[iFixture].minifiedObject).toEqual(originalInfo[iFixture].originalObject)
-    })
-  }
+  describe("minifyFiles", () => {
+    // expects
+    const fixtureNum = pathInfo.length
+    for (let iFixture = 0; iFixture !== fixtureNum; ++iFixture) {
+      it(pathInfo[iFixture].originalFile, () => {
+        expect(resultInfo[iFixture].minifiedObject).toEqual(originalInfo[iFixture].originalObject)
+      })
+    }
 
-  afterAll(async () => {
-    await Promise.all(pathInfo.map((file) => rm(file.minifiedFile)))
+    afterAll(async () => {
+      await Promise.all(pathInfo.map((file) => rm(file.minifiedFile)))
+    })
+  })
+
+  describe("minifyString", () => {
+    it("minifies a string", async () => {
+      const minifiedString = await minifyString(`
+        {
+          "foo": "bar",
+          "bar": ["baz", "bum", "zam"],
+          "something": 10,
+          "else": 20
+        }
+        `)
+      expect(minifiedString).toBe(`{"foo":"bar","bar":["baz","bum","zam"],"something":10,"else":20}`)
+    })
   })
 })

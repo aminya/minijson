@@ -35,8 +35,8 @@ void main(string[] args) @trusted
   // minify the given string and print to stdout
   if (jsonString)
   {
-    import std : writeln;
+    import std : write;
 
-    writeln(minifyString(jsonString));
+    write(minifyString(jsonString));
   }
 }

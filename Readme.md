@@ -37,10 +37,16 @@ Usage: minify json
 ### Node API
 
 ```js
-import { minifyFiles } from "minijson"
+import { minifyFiles, minifyString } from "minijson"
 
+// minify the files in-place and in parallel
 await minifyFiles(["file1.json", "file2.json"])
+
+// minify the given string
+const minifiedString = minifyString(`{"some_json": "here"}`)
 ```
+
+**Note**: in the Nodejs API, prefer `minifyFiles` over other functions, as it minifies the files in parallel with the least amount of resources.
 
 ### D API
 
