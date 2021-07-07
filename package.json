@@ -53,5 +53,28 @@
       "includeNodeModules": true
     }
   },
-  "prettier": "prettier-config-atomic"
+  "prettier": "prettier-config-atomic",
+  "keywords": [
+    "json",
+    "minify",
+    "jsonminify",
+    "jsonmin",
+    "fast",
+    "minijson",
+    "mini",
+    "min",
+    "minifier",
+    "js",
+    "build",
+    "build-tool",
+    "minijs",
+    "zip",
+    "small",
+    "tiny",
+    "blazing",
+    "d",
+    "c",
+    "rust",
+    "bandwith"
+  ]
 }
