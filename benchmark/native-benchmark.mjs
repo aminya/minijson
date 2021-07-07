@@ -8,4 +8,4 @@ const t1 = performance.now()
 await minifyFiles(jsonFiles)
 
 const t2 = performance.now()
-console.log(((t2 - t1)/1000).toFixed(3), "seconds")
+console.log(((t2 - t1) / 1000).toFixed(3), "seconds")
