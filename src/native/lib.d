@@ -1,8 +1,10 @@
 module minijson.lib;
 
-import std : ctRegex, replaceAll, join, appender, array, matchAll, matchFirst, RegexMatch;
+import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
+import automem : Vector;
 
-const tokenizer = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|[|]`, "g");
+const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
+const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
 const spaceOrBreakRegex = ctRegex!(`\s`);
 
@@ -18,14 +20,16 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
   Return:
     the minified json string
 */
-string minifyString(string jsonString, bool hasComments = false) @safe
+string minifyString(string jsonString, bool hasComments = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  auto new_str = appender!(string[]);
+  Vector!string new_str;
   size_t from = 0;
   auto rightContext = "";
+
+  const tokenizer = !hasComments ? tokenizerNoComment : tokenizerWithComment;
 
   auto match = jsonString.matchAll(tokenizer);
 
@@ -39,14 +43,15 @@ string minifyString(string jsonString, bool hasComments = false) @safe
     const lastIndex = jsonString.length - rightContext.length;
 
     const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
+
+    auto leftContextSubstr = leftContext[from .. $];
     if (noCommentOrNotInComment)
     {
-      auto leftContextSubstr = leftContext[from .. $];
       if (!in_string)
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
       }
-      new_str.put(leftContextSubstr);
+      new_str ~= leftContextSubstr;
     }
     from = lastIndex;
 
@@ -54,7 +59,7 @@ string minifyString(string jsonString, bool hasComments = false) @safe
     {
       if (matchFrontHit == "\"")
       {
-        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContext))
+        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
         {
           // start of string with ", or unescaped " character found to end string
           in_string = !in_string;
@@ -64,7 +69,7 @@ string minifyString(string jsonString, bool hasComments = false) @safe
       }
       else if (matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
       {
-        new_str.put(matchFrontHit);
+        new_str ~= matchFrontHit;
       }
     }
     // comments
@@ -93,14 +98,15 @@ string minifyString(string jsonString, bool hasComments = false) @safe
 
     match.popFront();
   }
-  new_str.put(rightContext);
+  new_str ~= rightContext;
   return new_str.array().join("");
 }
 
 bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 {
   auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
-  return leftContextMatch.empty() || (leftContextMatch.hit().length % 2 == 0);
+  // if not matched the hit length will be 0 (== leftContextMatch.empty())
+  return leftContextMatch.hit().length % 2 == 0;
 }
 
 /**

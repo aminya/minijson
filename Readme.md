@@ -1,8 +1,8 @@
 # minijson
 
-Minify JSON files **fast**! Written in D.
+Minify JSON files **blazing fast**! Written in D.
 
-1.5 times faster than jsonminify.
+55 times faster than jsonminify!
 
 [![CI](https://github.com/aminya/minijson/actions/workflows/CI.yml/badge.svg)](https://github.com/aminya/minijson/actions/workflows/CI.yml)
 
@@ -23,9 +23,9 @@ https://github.com/aminya/minijson/releases/tag/v0.3.1
 - Dub
 
 ```
-dub build --config=library --build=release --compiler=ldc2
+dub build --config=library --build=release-nobounds --compiler=ldc2
 # or
-dub build --config=executable --build=release --compiler=ldc2
+dub build --config=executable --build=release-nobounds --compiler=ldc2
 ```
 
 ### CLI Usage
@@ -70,10 +70,10 @@ minifyFiles(["file1.json", "file2.json"]);
 
 ```
 ❯ node .\benchmark\native-benchmark.mjs
-38,823 ms
+1.086 seconds
 
 ❯ node .\benchmark\js-benchmark.mjs
-58,686 ms
+58.686 seconds
 ```
 
 ### Contributing

@@ -9,6 +9,8 @@ targetPath "./dist"
 sourcePaths "./src/native"
 importPaths "./src/native"
 
+dependency "automem" version="~>0.6.6"
+
 configuration "executable" {
   targetType "executable"
   mainSourceFile "./src/native/cli.d"

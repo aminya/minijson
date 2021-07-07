@@ -30,7 +30,13 @@ export async function minifyFixtures(jsonFiles) {
   const resultInfo = await Promise.all(
     minifiedFiles.map(async (minifiedFile) => {
       const minifiedString = await readFile(minifiedFile, "utf8")
-      const minifiedObject = JSON.parse(minifiedString)
+      let minifiedObject
+      try {
+        minifiedObject = JSON.parse(minifiedString)
+      } catch (e) {
+        console.error(`The minified file is not valid for: ${minifiedFile}`)
+        throw e
+      }
       return { minifiedString, minifiedObject }
     })
   )
