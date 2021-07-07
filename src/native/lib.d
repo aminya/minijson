@@ -1,7 +1,6 @@
 module minijson.lib;
 
 import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
-import automem : Vector;
 
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
@@ -25,7 +24,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  Vector!string new_str;
+  string result;
   size_t from = 0;
   auto rightContext = "";
 
@@ -54,7 +53,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
       }
-      new_str ~= leftContextSubstr;
+      result ~= leftContextSubstr;
 
       if (matchFrontHit == "\"")
       {
@@ -82,7 +81,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         }
         else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
         {
-          new_str ~= matchFrontHit;
+          result ~= matchFrontHit;
         }
       }
       else if (in_multiline_comment && !in_singleline_comment && matchFrontHit == "*/")
@@ -96,12 +95,12 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
     }
     if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
-      new_str ~= matchFrontHit;
+      result ~= matchFrontHit;
     }
     match.popFront();
   }
-  new_str ~= rightContext;
-  return new_str.array().join("");
+  result ~= rightContext;
+  return result;
 }
 
 private bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
