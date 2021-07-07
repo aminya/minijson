@@ -3,8 +3,8 @@ module minijson.lib;
 import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
 import automem : Vector;
 
-const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|[|]`, "g");
-const tokenizerNoComment = ctRegex!(`"|\n|\r|[|]`, "g");
+const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
+const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
 const spaceOrBreakRegex = ctRegex!(`\s`);
 
