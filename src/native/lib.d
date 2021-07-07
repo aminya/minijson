@@ -17,7 +17,7 @@ const spaceOrBreakRegex = ctRegex!(`\s`);
   Return:
     the minified json string
 */
-string minifyString(string jsonString, bool hasComment = false) @trusted
+string minifyString(in string jsonString, in bool hasComment = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
@@ -121,7 +121,7 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
   return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
+private bool notSlashAndNoSpaceOrBreak(in string matchFrontHit) @safe
 {
   return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
 }
@@ -133,7 +133,7 @@ private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
     files = the paths to the files.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(string[] files, bool hasComment = false)
+void minifyFiles(in string[] files, in bool hasComment = false)
 {
   import std.parallelism : parallel;
   import std.file : readText, write;

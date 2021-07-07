@@ -14,7 +14,7 @@ extern (C):
   Return:
     the minified json string
 */
-auto minifyString(char* jsonCString, bool hasComment = false)
+auto minifyString(in char* jsonCString, in bool hasComment = false)
 {
   import std : fromStringz, toStringz;
 
