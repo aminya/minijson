@@ -1,6 +1,6 @@
 # minijson
 
-Minify JSON files **blazing fast**! Written in D.
+Minify JSON files **blazing fast**! Supports Comments. Written in D,
 
 55 times faster than jsonminify!
 
@@ -30,14 +30,22 @@ dub build --config=executable --build=release-nobounds --compiler=ldc2
 
 ### CLI Usage
 
-```
-Usage: minify json
-    minijson --file file1.json --file file2.json
-    minijson --string '{"some_json": "string_here"}'
+```shell
+❯ minijson --help
 
-     --file an array of files to minify
-   --string a json string to minify
--h   --help This help information.
+minijson: minify json files with support for comments
+    minijson --file file1.json --file file2.json
+    minijson --file file1_with_comment.json --file file2_with_comment.json --comment
+
+    minijson --string '{"some_json": "string_here"}'
+    minijson --string '{"some_json": "string_here"} //comment' --comment
+
+    More information at https://github.com/aminya/minijson
+
+      --file an array of files to minify
+    --string a json string to minify
+   --comment a flag to support comments in json
+-h    --help This help information.
 ```
 
 ### Node API
@@ -48,8 +56,14 @@ import { minifyFiles, minifyString } from "minijson"
 // minify the files in-place and in parallel
 await minifyFiles(["file1.json", "file2.json"])
 
+// supports comments by passing true as the second argument
+await minifyFiles(["file1_with_comment.json", "file2_with_comment.json"], true)
+
 // minify the given string
 const minifiedString = minifyString(`{"some_json": "here"}`)
+
+// supports comments by passing true as the second argument
+const minifiedString2 = minifyString(`{"some_json": "here"}//comment`, true)
 ```
 
 **Note**: in the Nodejs API, prefer `minifyFiles` over other functions, as it minifies the files in parallel with the least amount of resources.
@@ -62,8 +76,14 @@ import minijson: minifyString, minifyFiles;
 // minify the given string
 const minifiedString = minifyString(`{"some_json": "here"}`);
 
+// supports comments by passing true as the second argument
+const minifiedString2 = minifyString(`{"some_json": "here"}//comment`, true);
+
 // minify the files in-place and in parallel
 minifyFiles(["file1.json", "file2.json"]);
+
+// supports comments by passing true as the second argument
+minifyFiles(["file1.json", "file2.json"], true);
 ```
 
 ### Benchmarks
