@@ -31,17 +31,17 @@ minijson --file file1.json --file file2.json
 ### Node API
 
 ```js
-import { minify } from "minijson"
+import { minifyFiles } from "minijson"
 
-await minify(["file1.json", "file2.json"])
+await minifyFiles(["file1.json", "file2.json"])
 ```
 
 ### D API
 
 ```js
-import minijson: minify;
+import minijson: minifyString;
 
-minify(["file1.json", "file2.json"]);
+minifyString(`{"some_json": "here"}`);
 ```
 
 ### Benchmarks

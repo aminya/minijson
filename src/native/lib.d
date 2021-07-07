@@ -18,7 +18,7 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
   Return:
     the minified json string
 */
-string minify(string jsonString, bool hasComments = false) @safe
+string minifyString(string jsonString, bool hasComments = false) @safe
 {
   auto in_string = false;
   auto in_multiline_comment = false;

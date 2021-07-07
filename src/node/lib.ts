@@ -2,15 +2,15 @@ import { execFile } from "child_process"
 import { join } from "path"
 
 /**
- * Minify the given JSON string
+ * Minify all the given JSON files in place. It minifies the files in parallel.
  *
- * @param jsonString The json string you want to minify
- * @returns The minified json string
+ * @param files The paths to the files
+ * @returns {Promise<void>} Returns a void promise that resolves when all the files are minified
  */
-export function minijson(files: string[], __splice = true) {
+export function minifyFiles(files: string[], __splice = true): Promise<void> {
   const filesNum = files.length
   if (filesNum === 0) {
-    return
+    return Promise.resolve()
   }
 
   const exeExtention = process.platform === "win32" ? ".exe" : ""
