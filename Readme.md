@@ -18,7 +18,7 @@ npm install @aminya/minijson
 
 You can also download the binaries for the CLI from the release page:
 
-https://github.com/aminya/minijson/releases/tag/v0.4.0
+https://github.com/aminya/minijson/releases/tag/v0.5.0
 
 - Dub
 
