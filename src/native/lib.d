@@ -2,7 +2,6 @@ module minijson.lib;
 
 import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
 import automem : Vector;
-import std.experimental.allocator.mallocator : Mallocator;
 
 const tokenizer = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|[|]`, "g");
 
@@ -25,7 +24,7 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  Vector!(string, Mallocator) new_str;
+  Vector!string new_str;
   size_t from = 0;
   auto rightContext = "";
 
