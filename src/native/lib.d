@@ -1,6 +1,7 @@
 module minijson.lib;
 
-import std : ctRegex, replaceAll, join, appender, array, matchAll, matchFirst, RegexMatch;
+import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
+import automem : Vector;
 
 const tokenizer = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|[|]`, "g");
 
@@ -18,12 +19,12 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
   Return:
     the minified json string
 */
-string minifyString(string jsonString, bool hasComments = false) @safe
+string minifyString(string jsonString, bool hasComments = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  auto new_str = appender!(string[]);
+  Vector!string new_str;
   size_t from = 0;
   auto rightContext = "";
 
@@ -46,7 +47,7 @@ string minifyString(string jsonString, bool hasComments = false) @safe
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
       }
-      new_str.put(leftContextSubstr);
+      new_str ~= leftContextSubstr;
     }
     from = lastIndex;
 
@@ -64,7 +65,7 @@ string minifyString(string jsonString, bool hasComments = false) @safe
       }
       else if (matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
       {
-        new_str.put(matchFrontHit);
+        new_str ~= matchFrontHit;
       }
     }
     // comments
@@ -93,7 +94,7 @@ string minifyString(string jsonString, bool hasComments = false) @safe
 
     match.popFront();
   }
-  new_str.put(rightContext);
+  new_str ~= rightContext;
   return new_str.array().join("");
 }
 
