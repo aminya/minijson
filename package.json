@@ -27,6 +27,7 @@
     "build.wasm": "ldc2 ./src/wasm/wasm.d ./src/native/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
     "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
     "start.browser": "servor ./dist/ --browse --reload",
+    "start.benchmark": "node ./benchmark/native-benchmark.mjs",
     "start.node": "node ./dist/node/cli.js",
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
