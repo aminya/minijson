@@ -80,7 +80,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         {
           in_singleline_comment = true;
         }
-        else if (matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
+        else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
         {
           new_str ~= matchFrontHit;
         }
@@ -94,7 +94,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         in_singleline_comment = false;
       }
     }
-    if (!hasComment && matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
+    if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
       new_str ~= matchFrontHit;
     }
@@ -104,11 +104,16 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
   return new_str.array().join("");
 }
 
-bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
+private bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 {
   auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
   // if not matched the hit length will be 0 (== leftContextMatch.empty())
   return leftContextMatch.hit().length % 2 == 0;
+}
+
+private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
+{
+  return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
 }
 
 /**
