@@ -1,14 +1,11 @@
 module minijson.lib;
 
 import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
-import automem : Vector;
 
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
 const spaceOrBreakRegex = ctRegex!(`\s`);
-
-const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
 /**
   Minify the given JSON string
@@ -20,12 +17,12 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
   Return:
     the minified json string
 */
-string minifyString(string jsonString, bool hasComment = false) @trusted
+string minifyString(in string jsonString, in bool hasComment = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  Vector!string new_str;
+  string result;
   size_t from = 0;
   auto rightContext = "";
 
@@ -49,22 +46,24 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
     if (noCommentOrNotInComment)
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
-
-      if (!in_string)
+      if (leftContextSubstr.length != 0)
       {
-        leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
-      }
-      new_str ~= leftContextSubstr;
-
-      if (matchFrontHit == "\"")
-      {
-        if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+        if (!in_string)
         {
-          // start of string with ", or unescaped " character found to end string
-          in_string = !in_string;
+          leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
         }
-        --from; // include " character in next catch
-        rightContext = jsonString[from .. $];
+        result ~= leftContextSubstr;
+
+        if (matchFrontHit == "\"")
+        {
+          if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+          {
+            // start of string with ", or unescaped " character found to end string
+            in_string = !in_string;
+          }
+          --from; // include " character in next catch
+          rightContext = jsonString[from .. $];
+        }
       }
     }
     // comments
@@ -82,7 +81,7 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         }
         else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
         {
-          new_str ~= matchFrontHit;
+          result ~= matchFrontHit;
         }
       }
       else if (in_multiline_comment && !in_singleline_comment && matchFrontHit == "*/")
@@ -94,24 +93,35 @@ string minifyString(string jsonString, bool hasComment = false) @trusted
         in_singleline_comment = false;
       }
     }
-    if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
+    else if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
-      new_str ~= matchFrontHit;
+      result ~= matchFrontHit;
     }
     match.popFront();
   }
-  new_str ~= rightContext;
-  return new_str.array().join("");
+  result ~= rightContext;
+  return result;
 }
 
-private bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
+private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe @nogc
 {
-  auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
-  // if not matched the hit length will be 0 (== leftContextMatch.empty())
-  return leftContextMatch.hit().length % 2 == 0;
+  size_t slashCount = 0;
+
+  // NOTE leftContextSubstr.length is not 0 (checked outside of the function)
+  size_t index = leftContextSubstr.length - 1;
+
+  // loop over the string backwards and find `\`
+  while (leftContextSubstr[index] == '\\')
+  {
+    slashCount += 1;
+
+    index -= 1;
+  }
+  // no slash or even number of slashes
+  return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
+private bool notSlashAndNoSpaceOrBreak(in string matchFrontHit) @safe
 {
   return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
 }
@@ -123,7 +133,7 @@ private bool notSlashAndNoSpaceOrBreak(string matchFrontHit)
     files = the paths to the files.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(string[] files, bool hasComment = false)
+void minifyFiles(in string[] files, in bool hasComment = false)
 {
   import std.parallelism : parallel;
   import std.file : readText, write;
