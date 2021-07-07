@@ -15,4 +15,4 @@ dist
 .dub
 trace.*
 
-test/fixtures/*-minified.json
+test/fixtures/**/*-minified.json

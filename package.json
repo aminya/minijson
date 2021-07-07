@@ -2,7 +2,7 @@
   "name": "@aminya/minijson",
   "author": "Amin Yahyaabdi",
   "version": "0.4.1",
-  "description": "Minify JSON files blazing fast! Written in D",
+  "description": "Minify JSON files blazing fast! Supports Comments. Written in D.",
   "homepage": "https://github.com/aminya/minijson",
   "license": "MIT",
   "files": [
@@ -17,7 +17,7 @@
     "test.format": "prettier . --check",
     "lint": "eslint . --fix",
     "test.lint": "eslint .",
-    "test": "jasmine ./test/index-test.mjs",
+    "test": "jasmine ./test/index-test.mjs || shx rm -rf ./test/fixtures/**/*-minified.json",
     "clean": "shx rm -rf dist",
     "build.native": "dub build --config=executable",
     "build.native.release": "pnpm build.native -- --build release-nobounds --compiler=ldc2",
@@ -42,7 +42,8 @@
     "parcel": "^2.0.0-beta.3.1",
     "prettier-config-atomic": "^2.0.5",
     "servor": "^4.0.2",
-    "shx": "0.3.3"
+    "shx": "0.3.3",
+    "strip-json-comments": "^3.1.1"
   },
   "targets": {
     "browser": {
@@ -64,6 +65,17 @@
     "mini",
     "min",
     "minifier",
+    "jsonc",
+    "comment",
+    "comments",
+    "remove",
+    "delete",
+    "multiline",
+    "strip",
+    "trim",
+    "parse",
+    "jsonc",
+    "json5",
     "js",
     "build",
     "build-tool",
