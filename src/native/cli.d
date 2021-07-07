@@ -17,9 +17,10 @@ void main(string[] args) @trusted
 {
   string[] files;
   string jsonString;
+  bool hasComment = false;
 
   auto optResult = getopt(args, "file", "an array of files to minify", &files, "string",
-      "a json string to minify", &jsonString);
+      "a json string to minify", &jsonString, "comment", "a flag to support comments in json", &hasComment);
 
   if (optResult.helpWanted || (!files && !jsonString))
   {
@@ -29,7 +30,7 @@ void main(string[] args) @trusted
   // minify the given files
   if (files)
   {
-    minifyFiles(files);
+    minifyFiles(files, hasComment);
   }
 
   // minify the given string and print to stdout
@@ -37,6 +38,6 @@ void main(string[] args) @trusted
   {
     import std : write;
 
-    write(minifyString(jsonString));
+    write(minifyString(jsonString, hasComment));
   }
 }

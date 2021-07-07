@@ -15,12 +15,12 @@ const repeatingBackSlashRegex = ctRegex!(`(\\)*$`);
 
   Params:
     jsonString  = the json string you want to minify
-    hasComments = a switch that indicates if the json string has comments. Pass `true` to support parsing comments. Default: `false`.
+    hasComment = a boolean to support comments in json. Default: `false`.
 
   Return:
     the minified json string
 */
-string minifyString(string jsonString, bool hasComments = false) @trusted
+string minifyString(string jsonString, bool hasComment = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
@@ -29,7 +29,7 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
   size_t from = 0;
   auto rightContext = "";
 
-  const tokenizer = !hasComments ? tokenizerNoComment : tokenizerWithComment;
+  const tokenizer = !hasComment ? tokenizerNoComment : tokenizerWithComment;
 
   auto match = jsonString.matchAll(tokenizer);
 
@@ -43,7 +43,8 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
     const prevFrom = from;
     from = jsonString.length - rightContext.length; // lastIndex
 
-    const noCommentOrNotInComment = !hasComments || (!in_multiline_comment && !in_singleline_comment);
+    const notInComment = (!in_multiline_comment && !in_singleline_comment);
+    const noCommentOrNotInComment = !hasComment || notInComment;
 
     if (noCommentOrNotInComment)
     {
@@ -65,15 +66,11 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
         --from; // include " character in next catch
         rightContext = jsonString[from .. $];
       }
-      else if (matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
-      {
-        new_str ~= matchFrontHit;
-      }
     }
     // comments
-    if (hasComments && !in_string)
+    if (hasComment && !in_string)
     {
-      if (!in_multiline_comment && !in_singleline_comment)
+      if (notInComment)
       {
         if (matchFrontHit == "/*")
         {
@@ -82,6 +79,10 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
         else if (matchFrontHit == "//")
         {
           in_singleline_comment = true;
+        }
+        else if (matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
+        {
+          new_str ~= matchFrontHit;
         }
       }
       else if (in_multiline_comment && !in_singleline_comment && matchFrontHit == "*/")
@@ -93,7 +94,10 @@ string minifyString(string jsonString, bool hasComments = false) @trusted
         in_singleline_comment = false;
       }
     }
-
+    if (!hasComment && matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty())
+    {
+      new_str ~= matchFrontHit;
+    }
     match.popFront();
   }
   new_str ~= rightContext;
@@ -112,8 +116,9 @@ bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 
   Params:
     files = the paths to the files.
+    hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(string[] files)
+void minifyFiles(string[] files, bool hasComment = false)
 {
   import std.parallelism : parallel;
   import std.file : readText, write;
@@ -121,7 +126,7 @@ void minifyFiles(string[] files)
   foreach (ref file; files.parallel())
   {
     const string jsonString = readText(file);
-    const minifiedJsonString = minifyString(jsonString);
+    const minifiedJsonString = minifyString(jsonString, hasComment);
     write(file, minifiedJsonString);
   }
 }

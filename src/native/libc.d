@@ -9,17 +9,17 @@ extern (C):
 
   Params:
     jsonString  = the json string you want to minify
-    hasComments = a switch that indicates if the json string has comments. Pass `true` to support parsing comments. Default: `false`.
+    hasComment = a boolean to support comments in json. Default: `false`.
 
   Return:
     the minified json string
 */
-auto minifyString(char* jsonCString, bool hasComments = false)
+auto minifyString(char* jsonCString, bool hasComment = false)
 {
   import std : fromStringz, toStringz;
 
   const string jsonString = fromStringz(jsonCString).idup;
-  const minifiedString = minifyString(jsonString, hasComments);
+  const minifiedString = minifyString(jsonString, hasComment);
 
   return toStringz(minifiedString);
 }
