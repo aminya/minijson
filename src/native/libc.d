@@ -1,6 +1,6 @@
 module minijson.libc;
 
-import minijson.lib : minify;
+import minijson.lib : minifyString;
 
 extern (C):
 
@@ -14,12 +14,12 @@ extern (C):
   Return:
     the minified json string
 */
-auto minify(char* jsonCString, bool hasComments = false)
+auto minifyString(char* jsonCString, bool hasComments = false)
 {
   import std : fromStringz, toStringz;
 
   const string jsonString = fromStringz(jsonCString).idup;
-  const minifiedString = minify(jsonString, hasComments);
+  const minifiedString = minifyString(jsonString, hasComments);
 
   return toStringz(minifiedString);
 }

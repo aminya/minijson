@@ -25,23 +25,39 @@ dub fetch minijson --config=executable
 ### CLI Usage
 
 ```
-minijson --file file1.json --file file2.json
+Usage: minify json
+    minijson --file file1.json --file file2.json
+    minijson --string '{"some_json": "string_here"}'
+
+     --file an array of files to minify
+   --string a json string to minify
+-h   --help This help information.
 ```
 
 ### Node API
 
 ```js
-import { minify } from "minijson"
+import { minifyFiles, minifyString } from "minijson"
 
-await minify(["file1.json", "file2.json"])
+// minify the files in-place and in parallel
+await minifyFiles(["file1.json", "file2.json"])
+
+// minify the given string
+const minifiedString = minifyString(`{"some_json": "here"}`)
 ```
+
+**Note**: in the Nodejs API, prefer `minifyFiles` over other functions, as it minifies the files in parallel with the least amount of resources.
 
 ### D API
 
 ```js
-import minijson: minify;
+import minijson: minifyString, minifyFiles;
 
-minify(["file1.json", "file2.json"]);
+// minify the given string
+const minifiedString = minifyString(`{"some_json": "here"}`);
+
+// minify the files in-place and in parallel
+minifyFiles(["file1.json", "file2.json"]);
 ```
 
 ### Benchmarks

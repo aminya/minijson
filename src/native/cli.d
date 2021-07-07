@@ -1,33 +1,42 @@
 module minijson.cli;
 
-import minijson.lib : minify;
+import minijson.lib : minifyFiles, minifyString;
 
-import std.parallelism : parallel;
 import std.getopt : getopt, defaultGetoptPrinter, GetoptResult;
-import std.file : readText, write;
 
 /** Print help */
 void printHelp(GetoptResult optResult) @trusted
 {
-  return defaultGetoptPrinter("Usage: minify json files.\nminijson --file file1.json --file file2.json", optResult
-      .options);
+  return defaultGetoptPrinter(`Usage: minify json
+    minijson --file file1.json --file file2.json
+    minijson --string '{"some_json": "string_here"}'
+  `, optResult.options);
 }
 
 void main(string[] args) @trusted
 {
   string[] files;
+  string jsonString;
 
-  auto optResult = getopt(args, "file", "the json file to minify", &files);
+  auto optResult = getopt(args, "file", "an array of files to minify", &files, "string",
+      "a json string to minify", &jsonString);
 
-  if (optResult.helpWanted || !files)
+  if (optResult.helpWanted || (!files && !jsonString))
   {
     return printHelp(optResult);
   }
 
-  foreach (ref file; files.parallel())
+  // minify the given files
+  if (files)
   {
-    const string jsonString = readText(file);
-    const minifiedJsonString = minify(jsonString);
-    write(file, minifiedJsonString);
+    minifyFiles(files);
+  }
+
+  // minify the given string and print to stdout
+  if (jsonString)
+  {
+    import std : write;
+
+    write(minifyString(jsonString));
   }
 }
