@@ -8,18 +8,24 @@ Minify JSON files **fast**! Written in D.
 
 ### Installation
 
-Nodejs
+- Nodejs
 
 ```
 npm install @aminya/minijson
 ```
 
-Dub
+- CLI Binaries
+
+You can also download the binaries for the CLI from the release page:
+
+https://github.com/aminya/minijson/releases/tag/v0.3.1
+
+- Dub
 
 ```
-dub fetch minijson --config=library
+dub build --config=library --build=release --compiler=ldc2
 # or
-dub fetch minijson --config=executable
+dub build --config=executable --build=release --compiler=ldc2
 ```
 
 ### CLI Usage
