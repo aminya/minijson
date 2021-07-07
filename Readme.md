@@ -23,9 +23,9 @@ https://github.com/aminya/minijson/releases/tag/v0.3.1
 - Dub
 
 ```
-dub build --config=library --build=release --compiler=ldc2
+dub build --config=library --build=release-nobounds --compiler=ldc2
 # or
-dub build --config=executable --build=release --compiler=ldc2
+dub build --config=executable --build=release-nobounds --compiler=ldc2
 ```
 
 ### CLI Usage
