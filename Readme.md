@@ -2,7 +2,7 @@
 
 Minify JSON files **fast**! Written in D.
 
-4 times faster than jsonminify.
+1.5 times faster than jsonminify.
 
 [![CI](https://github.com/aminya/minijson/actions/workflows/CI.yml/badge.svg)](https://github.com/aminya/minijson/actions/workflows/CI.yml)
 
@@ -48,7 +48,7 @@ minify(["file1.json", "file2.json"]);
 
 ```
 ❯ node .\benchmark\native-benchmark.mjs
-14,259 ms
+38,823 ms
 
 ❯ node .\benchmark\js-benchmark.mjs
 58,686 ms
