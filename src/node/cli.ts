@@ -1,8 +1,7 @@
-import { minifyFiles } from "./lib"
+import { spawnMinijson } from "./lib"
 
 async function main() {
-  const args = process.argv
-  await minifyFiles(args, false)
+  await spawnMinijson(process.argv)
 }
 
 main().catch((e) => {

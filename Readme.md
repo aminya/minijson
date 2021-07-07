@@ -25,7 +25,13 @@ dub fetch minijson --config=executable
 ### CLI Usage
 
 ```
-minijson --file file1.json --file file2.json
+Usage: minify json
+    minijson --file file1.json --file file2.json
+    minijson --string '{"some_json": "string_here"}'
+
+     --file an array of files to minify
+   --string a json string to minify
+-h   --help This help information.
 ```
 
 ### Node API
