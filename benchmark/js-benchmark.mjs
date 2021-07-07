@@ -2,7 +2,7 @@ import { readFile, writeFile } from "fs/promises"
 import { performance } from "perf_hooks"
 import jsonMinify from "jsonminify"
 
-import { jsonFiles } from "../test/fixtures.mjs"
+import { standardFiles } from "../test/fixtures.mjs"
 
 // warmup
 const tmp = await jsonMinify("{}")
@@ -10,7 +10,7 @@ const tmp = await jsonMinify("{}")
 const t1 = performance.now()
 
 await Promise.all(
-  jsonFiles.map(async (jsonFile) => {
+  standardFiles.map(async (jsonFile) => {
     const jsonString = await readFile(jsonFile, "utf8")
     const data = await jsonMinify(jsonString)
     return await writeFile(jsonFile, data)
