@@ -13,7 +13,7 @@ jobs:
         os:
           - windows-latest
           - macos-latest
-          # - ubuntu-latest # https://github.com/ldc-developers/ldc/issues/3780
+          - ubuntu-latest
         d:
           - "ldc-beta"
         node:
@@ -22,12 +22,6 @@ jobs:
           - 6
         clang:
           - 12
-        include:
-          # dmd
-          - os: ubuntu-latest
-            d: dmd-latest
-            node: 16
-            pnpm: 6
     steps:
       - uses: actions/checkout@v2
 

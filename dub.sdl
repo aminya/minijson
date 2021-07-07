@@ -24,7 +24,7 @@ configuration "library" {
 // enables all disp except =nosharedaccess
 dflags "-vgc" "-preview=dip25" "-preview=dip1000" "-preview=dip1008" "-preview=fieldwise" "-preview=fixAliasThis" "-preview=intpromote" "-preview=rvaluerefparam" "-preview=in"
 /* dflags "-preview=inclusiveincontracts" platform="dmd" // only on dmd */
-dflags "-preview=dip1021" platform="posix-ldc" //  "-preview=dip1021" breaks the build in other cases
+/* dflags "-preview=dip1021" platform="posix-ldc" //  "breaks the build */
 
 
 buildType "debug-sanitize-address" platform="ldc" {
