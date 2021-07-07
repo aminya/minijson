@@ -99,6 +99,6 @@ string minify(string jsonString, bool hasComments = false) @safe
 
 bool hasNoSlashOrEvenNumberOfSlashes(string leftContext) @safe
 {
-  auto leftContextMatch = leftContext.matchAll(repeatingBackSlashRegex);
+  auto leftContextMatch = leftContext.matchFirst(repeatingBackSlashRegex);
   return leftContextMatch.empty() || (leftContextMatch.hit().length % 2 == 0);
 }
