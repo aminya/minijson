@@ -4,7 +4,7 @@ import { join } from "path"
 /**
  * Minify all the given JSON files in place. It minifies the files in parallel.
  *
- * @param files The paths to the files
+ * @param files an array of paths to the files
  * @returns {Promise<void>} Returns a void promise that resolves when all the files are minified
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
@@ -36,18 +36,19 @@ export async function minifyString(jsonString: string): Promise<string> {
   return (await spawnMinijson(["--string", jsonString])).trim()
 }
 
+const exeExtention = process.platform === "win32" ? ".exe" : ""
+const binName = `minijson${exeExtention}`
+
+const minijsonBin = join(__dirname, `${process.platform}-${process.arch}`, binName)
+
 /**
  * Spawn minijson with the given arguments
  *
+ * @param args an array of arguments
  * @returns {Promise<string>} Returns a promise that resolves to stdout output string when the operation finishes
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
 export function spawnMinijson(args: string[]): Promise<string> {
-  const exeExtention = process.platform === "win32" ? ".exe" : ""
-  const binName = `minijson${exeExtention}`
-
-  const minijsonBin = join(__dirname, `${process.platform}-${process.arch}`, binName)
-
   return new Promise<string>((resolve, reject) => {
     execFile(minijsonBin, args, (err, stdout, stderr) => {
       if (err) {
