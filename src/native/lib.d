@@ -2,6 +2,8 @@ module minijson.lib;
 
 import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
 
+import minijson.remove_spaces : remove_spaces;
+
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
@@ -49,7 +51,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
       const noLeftContext = leftContextSubstr.length == 0;
       if (!in_string && !noLeftContext)
       {
-        leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+        leftContextSubstr = remove_spaces(leftContextSubstr);
       }
       if (!noLeftContext)
       {
