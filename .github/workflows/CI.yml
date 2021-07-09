@@ -22,6 +22,10 @@ jobs:
           - 6
         clang:
           - 12
+        cmake:
+          - 3.20.2
+        ninja:
+          - 1.10.2
     steps:
       - uses: actions/checkout@v2
 
@@ -43,11 +47,16 @@ jobs:
       # Setup compilers and tools
 
       - name: Setup LLVM
-        if: contains(matrix.os, 'ubuntu') && matrix.clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: ${{ matrix.clang }}
           cached: ${{ steps.cache.outputs.cache-hit }}
+
+      - name: Setup Cmake and Ninja
+        uses: aminya/install-cmake@new-versions-and-arch
+        with:
+          cmake: ${{ matrix.cmake }}
+          ninja: ${{ matrix.ninja }}
 
       - name: Setup Node
         uses: actions/setup-node@v2
