@@ -17,7 +17,7 @@
     "test.format": "prettier . --check",
     "lint": "eslint . --fix",
     "test.lint": "eslint .",
-    "test": "jasmine ./test/index-test.mjs || shx rm -rf ./test/fixtures/**/*-minified.json",
+    "test": "jasmine ./test/index-test.mjs",
     "clean": "shx rm -rf dist",
     "build.native": "dub build --config=executable",
     "build.native.release": "pnpm build.native -- --build release-nobounds --compiler=ldc2",
