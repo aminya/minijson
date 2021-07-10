@@ -2,7 +2,7 @@
 
 Minify JSON files **blazing fast**! Supports Comments. Written in D.
 
-360 times faster than jsonminify!
+385 times faster than jsonminify!
 
 [![CI](https://github.com/aminya/minijson/actions/workflows/CI.yml/badge.svg)](https://github.com/aminya/minijson/actions/workflows/CI.yml)
 
@@ -92,7 +92,7 @@ On AMD Ryzen 7 4800H:
 
 ```
 ❯ node .\benchmark\native-benchmark.mjs
-0.163 seconds
+0.152 seconds
 
 ❯ node .\benchmark\js-benchmark.mjs
 58.818 seconds

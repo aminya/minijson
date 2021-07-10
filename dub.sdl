@@ -29,7 +29,7 @@ dflags "-vgc" "-preview=dip25" "-preview=dip1000" "-preview=dip1008" "-preview=f
 /* dflags "-preview=dip1021" platform="posix-ldc" //  "breaks the build */
 
 # link time optimizations
-dflags "--flto=full" platfrom="ldc"
+dflags "--flto=full" "--ffast-math" platfrom="ldc"
 
 # support SIMD, etc
 dflags "-mcpu=native"
