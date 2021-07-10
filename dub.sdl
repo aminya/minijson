@@ -28,7 +28,11 @@ dflags "-vgc" "-preview=dip25" "-preview=dip1000" "-preview=dip1008" "-preview=f
 /* dflags "-preview=inclusiveincontracts" platform="dmd" // only on dmd */
 /* dflags "-preview=dip1021" platform="posix-ldc" //  "breaks the build */
 
+# link time optimizations
 dflags "--flto=full" platfrom="ldc"
+
+# support SIMD, etc
+dflags "-mcpu=native"
 
 buildType "debug-sanitize-address" platform="ldc" {
   dflags "--fsanitize=address" "--link-defaultlib-debug"
