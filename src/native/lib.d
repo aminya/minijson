@@ -46,24 +46,24 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     if (noCommentOrNotInComment)
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
-      if (leftContextSubstr.length != 0)
+      const noLeftContext = leftContextSubstr.length == 0;
+      if (!in_string && !noLeftContext)
       {
-        if (!in_string)
-        {
-          leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
-        }
+        leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+      }
+      if (!noLeftContext) {
         result ~= leftContextSubstr;
+      }
 
-        if (matchFrontHit == "\"")
+      if (matchFrontHit == "\"")
+      {
+        if (!in_string || noLeftContext || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
         {
-          if (!in_string || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
-          {
-            // start of string with ", or unescaped " character found to end string
-            in_string = !in_string;
-          }
-          --from; // include " character in next catch
-          rightContext = jsonString[from .. $];
+          // start of string with ", or unescaped " character found to end string
+          in_string = !in_string;
         }
+        --from; // include " character in next catch
+        rightContext = jsonString[from .. $];
       }
     }
     // comments
