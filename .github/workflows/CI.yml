@@ -30,6 +30,9 @@ jobs:
           - clang
         CXX:
           - clang++
+    env:
+      CC: ${{ matrix.CC }}
+      CXX: ${{ matrix.CXX }}
     steps:
       - uses: actions/checkout@v2
 
