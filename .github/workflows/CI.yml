@@ -49,7 +49,9 @@ jobs:
             ./.dub
             ./llvm
             C:/Program Files/LLVM
-          key: "cache-D:${{ matrix.d }}-OS:${{ matrix.os }}-Clang:${{ matrix.clang }}"
+          key: "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-Clang:${{ matrix.clang }}-dub:${{ hashFiles('./dub.selections.json')}}-pnpm:${{ hashFiles('./pnpm-lock.yaml') }}"
+          restore-keys: |
+            "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-Clang:${{ matrix.clang }}"
 
       # Setup compilers and tools
 
