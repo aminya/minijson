@@ -39,7 +39,7 @@ export async function minifyFixtures(jsonFiles, hasComment) {
         minifiedObject = JSON.parse(minifiedString)
       } catch (e) {
         console.error(`The minified file is not valid for: ${minifiedFile}`)
-        throw e
+        return { minifiedString, minifiedObject: {} }
       }
       return { minifiedString, minifiedObject }
     })

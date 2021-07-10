@@ -1,3 +1,4 @@
+import "./reporter.mjs"
 import { minifyFixtures } from "./helper.mjs"
 import { minifyFiles, minifyString } from "../dist/lib.js"
 import { standardFiles, withCommentFiles } from "./fixtures.mjs"
@@ -14,7 +15,9 @@ describe("minijson", () => {
     const fixtureNum = pathInfo.length
     for (let iFixture = 0; iFixture !== fixtureNum; ++iFixture) {
       it(pathInfo[iFixture].originalFile, () => {
-        expect(resultInfo[iFixture].minifiedObject).toEqual(originalInfo[iFixture].originalObject)
+        const originalObject = originalInfo[iFixture].originalObject
+        const minifiedObject = resultInfo[iFixture].minifiedObject
+        expect(minifiedObject).toEqual(originalObject)
       })
     }
 
