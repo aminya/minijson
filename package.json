@@ -1,7 +1,7 @@
 {
   "name": "@aminya/minijson",
   "author": "Amin Yahyaabdi",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Minify JSON files blazing fast! Supports Comments. Written in D.",
   "homepage": "https://github.com/aminya/minijson",
   "license": "MIT",
