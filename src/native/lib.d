@@ -2,7 +2,7 @@ module minijson.lib;
 
 import std : ctRegex, matchAll, matchFirst;
 
-import minijson.remove_spaces : remove_spaces;
+import despacer.simd_check : supports_sse4_1, supports_avx2;
 
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
@@ -127,6 +127,21 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
 private bool notSlashAndNoSpaceOrBreak(in string matchFrontHit) @safe
 {
   return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+}
+
+/** Removes spaces from the original string */
+private string remove_spaces(string str) nothrow
+{
+  static if (supports_sse4_1())
+  {
+    import despacer.despacer : d_sse4_despace_branchless_u4;
+
+    return d_sse4_despace_branchless_u4(str);
+  }
+  else
+  {
+    leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+  }
 }
 
 /**
