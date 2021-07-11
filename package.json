@@ -23,7 +23,7 @@
     "build.release": "pnpm build -- --build release-nobounds --compiler=ldc2",
     "build.profile": "pnpm build -- --build profile --compiler=ldc2 && node ./src/node/build.js && npm run build.node.js",
     "build.benchmark": "dub build --config=benchmark --build release-nobounds --compiler=ldc2",
-    "start.profile": "shx rm -rf ./trace.* && npm run start.benchmark && profdump.exe --dot trace.log trace.dot && dot -Tsvg trace.dot -o trace.svg && ./trace.svg",
+    "start.profile": "shx rm -rf ./trace.* && npm run start.benchmark.node && profdump.exe --dot trace.log trace.dot && dot -Tsvg trace.dot -o trace.svg && ./trace.svg",
     "build.node": "npm run build.release && node ./src/node/build.js && npm run build.node.js",
     "build.node.js": "tsc -p ./src/node/tsconfig.json",
     "build.wasm": "ldc2 ./src/wasm/wasm.d ./src/native/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
