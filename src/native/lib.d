@@ -151,10 +151,10 @@ private bool hasNoSpace(const ref string matchFrontHit) @trusted
 {
   static if (supports_avx2())
   {
-    import despacer.despacer : avx2_countspaces;
+    import despacer.despacer : avx2_hasspace;
 
     // the algorithm never checks for zero termination so toStringz is not needed
-    return avx2_countspaces(cast(const char*) matchFrontHit, matchFrontHit.length) == 0;
+    return !avx2_hasspace(cast(const char*) matchFrontHit, matchFrontHit.length);
   }
   else
   {
