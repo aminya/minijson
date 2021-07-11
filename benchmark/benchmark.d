@@ -9,8 +9,10 @@ void main(string[] args)
 {
   bool benchmarkMinifyFiles = false;
   bool benchmarkMinifyString = true;
+  bool benchmarkParallelMinifyString = false;
 
-  getopt(args, "benchmark-minifyFiles", &benchmarkMinifyFiles, "benchmark-minifyString", &benchmarkMinifyString);
+  getopt(args, "benchmark-minifyFiles", &benchmarkMinifyFiles, "benchmark-minifyString",
+      &benchmarkMinifyString, "benchmark-parallel-minifyString", &benchmarkParallelMinifyString);
 
   const string[] files = dirEntries("./test/fixtures/standard", SpanMode.shallow).map!(entry => entry.name).array();
 
@@ -36,7 +38,7 @@ void main(string[] args)
 
   if (benchmarkMinifyString)
   {
-    writeln("Benchmark minifyString");
+    writeln("Benchmark minifyString single-threaded");
     const repeat = 120;
     auto repeater = iota(repeat);
     string tmp;
@@ -52,5 +54,23 @@ void main(string[] args)
     result = sw.peek();
 
     writeln(result / repeat);
+
+    if (benchmarkParallelMinifyString)
+    {
+      writeln("Benchmark minifyString multi-threaded");
+      auto repeater2 = iota(repeat);
+
+      sw.reset();
+      foreach (_; repeater2)
+      {
+        foreach (fileContent; filesContent.parallel())
+        {
+          tmp = minifyString(fileContent);
+        }
+      }
+      result = sw.peek();
+
+      writeln(result / repeat);
+    }
   }
 }

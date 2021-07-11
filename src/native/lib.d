@@ -1,11 +1,11 @@
 module minijson.lib;
 
-import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
+import std : ctRegex, matchAll, matchFirst, toStringz;
+
+import despacer.simd_check : supports_sse4_1, supports_avx2;
 
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
-
-const spaceOrBreakRegex = ctRegex!(`\s`);
 
 /**
   Minify the given JSON string
@@ -49,7 +49,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
       const noLeftContext = leftContextSubstr.length == 0;
       if (!in_string && !noLeftContext)
       {
-        leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+        leftContextSubstr = remove_spaces(leftContextSubstr);
       }
       if (!noLeftContext)
       {
@@ -122,9 +122,45 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
   return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(in string matchFrontHit) @safe
+private bool notSlashAndNoSpaceOrBreak(const ref string matchFrontHit) @safe
 {
-  return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+  return matchFrontHit != "\"" && hasNoSpace(matchFrontHit);
+}
+
+/** Removes spaces from the original string */
+private string remove_spaces(string str) @trusted nothrow
+{
+  static if (supports_sse4_1())
+  {
+    import despacer.despacer : sse4_despace_branchless_u4;
+
+    // this wrapper reduces the overall time by 15 compared to d_sse4_despace_branchless_u4 because of no dup and toStringz
+    auto cstr = cast(char*) str;
+    const length = str.length;
+    return str[0 .. sse4_despace_branchless_u4(cstr, length)];
+  }
+  else
+  {
+    const spaceOrBreakRegex = ctRegex!(`\s`);
+    leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+  }
+}
+
+/** Check if the given string has space  */
+private bool hasNoSpace(const ref string matchFrontHit) @trusted
+{
+  static if (supports_avx2())
+  {
+    import despacer.despacer : avx2_hasspace;
+
+    // the algorithm never checks for zero termination so toStringz is not needed
+    return !avx2_hasspace(cast(const char*) matchFrontHit, matchFrontHit.length);
+  }
+  else
+  {
+    const spaceOrBreakRegex = ctRegex!(`\s`);
+    return matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+  }
 }
 
 /**
