@@ -147,14 +147,14 @@ private string remove_spaces(string str) @trusted nothrow
 }
 
 /** Check if the given string has space  */
-private bool hasNoSpace(const ref string matchFrontHit) @trusted nothrow
+private bool hasNoSpace(const ref string matchFrontHit) @trusted
 {
   static if (supports_avx2())
   {
     import despacer.despacer : avx2_countspaces;
 
     // the algorithm never checks for zero termination so toStringz is not needed
-    return avx2_countspaces(cast(const char*) matchFrontHit, 1) == 0;
+    return avx2_countspaces(cast(const char*) matchFrontHit, matchFrontHit.length) == 0;
   }
   else
   {
