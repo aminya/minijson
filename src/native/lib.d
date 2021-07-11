@@ -1,6 +1,6 @@
 module minijson.lib;
 
-import std : ctRegex, replaceAll, join, array, matchAll, matchFirst, RegexMatch;
+import std : ctRegex, matchAll, matchFirst;
 
 import minijson.remove_spaces : remove_spaces;
 
