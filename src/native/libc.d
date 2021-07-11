@@ -2,8 +2,6 @@ module minijson.libc;
 
 import minijson.lib : minifyString;
 
-extern (C):
-
 /**
   Minify the given JSON string using C ABI.
 
@@ -14,7 +12,7 @@ extern (C):
   Return:
     the minified json string
 */
-auto minifyString(in char* jsonCString, in bool hasComment = false)
+extern (C) auto c_minifyString(in char* jsonCString, in bool hasComment = false)
 {
   import std : fromStringz, toStringz;
 
