@@ -132,9 +132,12 @@ private string remove_spaces(string str) @trusted nothrow
 {
   static if (supports_sse4_1())
   {
-    import despacer.despacer : d_sse4_despace_branchless_u4;
+    import despacer.despacer : sse4_despace_branchless_u4;
 
-    return d_sse4_despace_branchless_u4(str);
+    // this wrapper reduces the overall time by 15 compared to d_sse4_despace_branchless_u4 because of no dup and toStringz
+    auto cstr = cast(char*) str;
+    const length = str.length;
+    return str[0 .. sse4_despace_branchless_u4(cstr, length)];
   }
   else
   {
@@ -150,7 +153,8 @@ private bool hasNoSpace(const ref string matchFrontHit) @trusted nothrow
   {
     import despacer.despacer : avx2_countspaces;
 
-    return avx2_countspaces(toStringz(matchFrontHit), 1) == 0;
+    // the algorithm never checks for zero termination so toStringz is not needed
+    return avx2_countspaces(cast(const char*) matchFrontHit, 1) == 0;
   }
   else
   {
