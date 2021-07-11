@@ -1,6 +1,6 @@
 # minijson
 
-Minify JSON files **blazing fast**! Supports Comments. Written in D.
+Minify JSON files **blazing fast**! Supports Comments. Uses D, C, and AVX2 and SSE4_1 SIMD.
 
 4180 times faster than jsonminify!
 
@@ -14,11 +14,11 @@ Minify JSON files **blazing fast**! Supports Comments. Written in D.
 npm install @aminya/minijson
 ```
 
-- CLI Binaries
+- Native CLI Binaries (Windows, MacOS, Linux)
 
-You can also download the binaries for the CLI from the release page:
+You can download the native binaries for the CLI from the release page:
 
-https://github.com/aminya/minijson/releases/tag/v0.5.1
+https://github.com/aminya/minijson/releases/tag/v0.6.0
 
 - Dub
 
@@ -96,10 +96,10 @@ On AMD Ryzen 7 4800H:
 
 ```
 ❯ .\dist\minijson-benchmark.exe --benchmark-minifyString --benchmark-minifyFiles
-Benchmark minifyFiles
-49 ms
 Benchmark minifyString
 14 ms
+Benchmark minifyFiles
+49 ms
 
 ❯ node .\benchmark\js-benchmark.mjs
 Benchmark minifyString

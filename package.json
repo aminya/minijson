@@ -2,7 +2,7 @@
   "name": "@aminya/minijson",
   "author": "Amin Yahyaabdi",
   "version": "0.5.1",
-  "description": "Minify JSON files blazing fast! Supports Comments. Written in D.",
+  "description": "Minify JSON files blazing fast! Supports Comments. Uses D, C, and AVX2 and SSE4_1 SIMD",
   "homepage": "https://github.com/aminya/minijson",
   "license": "MIT",
   "files": [
@@ -89,6 +89,14 @@
     "blazing",
     "d",
     "c",
+    "simd",
+    "avx",
+    "sse",
+    "sse3",
+    "sse4",
+    "sse4.1",
+    "sse4.2",
+    "avx2",
     "rust",
     "bandwith"
   ]

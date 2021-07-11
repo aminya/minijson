@@ -1,6 +1,6 @@
 module minijson.lib;
 
-import std : ctRegex, matchAll, matchFirst, toStringz;
+import std : ctRegex, matchAll, matchFirst;
 
 import despacer.simd_check : supports_sse4_1, supports_avx2;
 
