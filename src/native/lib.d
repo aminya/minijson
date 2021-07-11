@@ -1,13 +1,11 @@
 module minijson.lib;
 
-import std : ctRegex, matchAll, matchFirst;
+import std : ctRegex, matchAll, matchFirst, toStringz;
 
 import despacer.simd_check : supports_sse4_1, supports_avx2;
 
 const tokenizerWithComment = ctRegex!(`"|(/\*)|(\*/)|(//)|\n|\r|\[|]`, "g");
 const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
-
-const spaceOrBreakRegex = ctRegex!(`\s`);
 
 /**
   Minify the given JSON string
@@ -124,13 +122,13 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
   return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(in string matchFrontHit) @safe
+private bool notSlashAndNoSpaceOrBreak(const ref string matchFrontHit) @safe
 {
-  return matchFrontHit != "\"" && matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+  return matchFrontHit != "\"" && hasNoSpace(matchFrontHit);
 }
 
 /** Removes spaces from the original string */
-private string remove_spaces(string str) nothrow
+private string remove_spaces(string str) @trusted nothrow
 {
   static if (supports_sse4_1())
   {
@@ -140,7 +138,24 @@ private string remove_spaces(string str) nothrow
   }
   else
   {
+    const spaceOrBreakRegex = ctRegex!(`\s`);
     leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+  }
+}
+
+/** Check if the given string has space  */
+private bool hasNoSpace(const ref string matchFrontHit) @trusted nothrow
+{
+  static if (supports_avx2())
+  {
+    import despacer.despacer : avx2_countspaces;
+
+    return avx2_countspaces(toStringz(matchFrontHit), 1) == 0;
+  }
+  else
+  {
+    const spaceOrBreakRegex = ctRegex!(`\s`);
+    return matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
   }
 }
 
