@@ -21,6 +21,13 @@ configuration "library" {
   targetName "minijson"
 }
 
+configuration "benchmark" {
+  targetType "executable"
+  targetName "minijson-benchmark"
+  mainSourceFile "./benchmark/benchmark.d"
+  excludedSourceFiles "src/native/cli.d" "src/native/libc.d"
+}
+
 # -------- Build Options and configurations --------
 
 // enables all disp except =nosharedaccess

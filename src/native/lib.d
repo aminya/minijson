@@ -51,7 +51,8 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
       {
         leftContextSubstr = leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
       }
-      if (!noLeftContext) {
+      if (!noLeftContext)
+      {
         result ~= leftContextSubstr;
       }
 

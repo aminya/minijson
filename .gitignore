@@ -14,5 +14,11 @@ dist
 .parcel-cache
 .dub
 trace.*
+*.exe
+*.lib
+*.a
+*.dll
+*.o
+*.obj
 
 test/fixtures/**/*-minified.json
