@@ -23,6 +23,7 @@ https://github.com/aminya/minijson/releases/tag/v0.5.1
 - Dub
 
 ```
+git submodule update --init --recursive
 dub build --config=library --build=release-nobounds --compiler=ldc2
 # or
 dub build --config=executable --build=release-nobounds --compiler=ldc2

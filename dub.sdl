@@ -10,16 +10,8 @@ sourcePaths "./src/native"
 importPaths "./src/native"
 
 dependency "automem" version="~>0.6.6"
-
-# despacer
-libs "./dist/despacer" platform="windows"
-lflags "./dist/despacer.a" platform="posix"
-preBuildCommands "cmake -G Ninja -S ./src/native/despacer -B ./dist && cmake --build ./dist --config Release" platform="windows"
-preBuildCommands "cmake -S ./src/native/despacer -B ./dist && cmake --build ./dist --config Release" platform="posix"
-libs "msvcrt" platform="windows"
-lflags "/NODEFAULTLIB:libcmt" "/NODEFAULTLIB:msvcrtd" platform="windows-dmd"
-dflags "--link-internally" platform="windows-ldc"
-extraDependencyFiles "./src/native/despacer/**/*"
+preGenerateCommands "git submodule update --init" # despacer download
+dependency "despacer" path="./src/native/despacer/bindings/d"
 
 configuration "executable" {
   targetType "executable"
