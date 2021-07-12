@@ -177,8 +177,6 @@ void minifyFiles(in string[] files, in bool hasComment = false)
 
   foreach (file; files.parallel())
   {
-    const string jsonString = readText(file);
-    const minifiedJsonString = minifyString(jsonString, hasComment);
-    write(file, minifiedJsonString);
+    write(file, minifyString(readText(file), hasComment));
   }
 }
