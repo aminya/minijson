@@ -24,7 +24,9 @@
     "build.profile": "pnpm build -- --build profile --compiler=ldc2 && node ./src/node/build.js && npm run build.node.js",
     "build.benchmark": "dub build --config=benchmark --build release-nobounds --compiler=ldc2",
     "start.profile": "shx rm -rf ./trace.* && npm run start.benchmark.node && profdump.exe --dot trace.log trace.dot && dot -Tsvg trace.dot -o trace.svg && ./trace.svg",
-    "build.node": "npm run build.release && node ./src/node/build.js && npm run build.node.js",
+    "build.node.exe": "dub build --config=node-executable --build=release-nobounds --compiler=ldc2 && tsc -p ./src/node/tsconfig.json",
+    "build.node.lib": "dub build --config=node-lib --build=release-nobounds --compiler=ldc2 && tsc -p ./src/node/tsconfig.json",
+    "build.node": "npm run build.node.exe && npm run build.node.lib",
     "build.node.js": "tsc -p ./src/node/tsconfig.json",
     "build.wasm": "ldc2 ./src/wasm/wasm.d ./src/native/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
     "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
@@ -33,6 +35,9 @@
     "start.node": "node ./dist/node/cli.js",
     "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson",
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
+  },
+  "dependencies": {
+    "node-addon-api": "^4.0.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.7.7",

@@ -17,7 +17,7 @@ const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
   Return:
     the minified json string
 */
-string minifyString(in string jsonString, in bool hasComment = false) @trusted
+extern (C) string minifyString(string jsonString, bool hasComment = false) @trusted
 {
   auto in_string = false;
   auto in_multiline_comment = false;
@@ -170,7 +170,7 @@ private bool hasNoSpace(const ref string matchFrontHit) @trusted
     files = the paths to the files.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(in string[] files, in bool hasComment = false)
+extern (C) void minifyFiles(string[] files, bool hasComment = false)
 {
   import std.parallelism : parallel;
   import std.file : readText, write;
