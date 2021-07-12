@@ -92,14 +92,14 @@ minifyFiles(["file1.json", "file2.json"], true);
 On AMD Ryzen 7 4800H:
 
 - minifyString: minijson is 4178 times faster than jsonMinify
-- minifyFiles: minijson is 1198 times faster than jsonMinify.
+- minifyFiles: minijson is 1894 times faster than jsonMinify.
 
 ```
 ❯ .\dist\minijson-benchmark.exe --benchmark-minifyString --benchmark-minifyFiles
 Benchmark minifyString
 14 ms
 Benchmark minifyFiles
-49 ms
+31 ms
 
 ❯ node .\benchmark\js-benchmark.mjs
 Benchmark minifyString
