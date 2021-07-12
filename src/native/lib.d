@@ -47,15 +47,13 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
       const noLeftContext = leftContextSubstr.length == 0;
-      if (!in_string && !noLeftContext)
-      {
-        leftContextSubstr = remove_spaces(leftContextSubstr);
-      }
-      if (!noLeftContext)
-      {
+      if (!noLeftContext) {
+        if (!in_string)
+        {
+          leftContextSubstr = remove_spaces(leftContextSubstr);
+        }
         result ~= leftContextSubstr;
       }
-
       if (matchFrontHit == "\"")
       {
         if (!in_string || noLeftContext || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
