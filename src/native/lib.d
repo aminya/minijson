@@ -175,7 +175,7 @@ void minifyFiles(in string[] files, in bool hasComment = false)
   import std.parallelism : parallel;
   import std.file : readText, write;
 
-  foreach (ref file; files.parallel())
+  foreach (file; files.parallel())
   {
     const string jsonString = readText(file);
     const minifiedJsonString = minifyString(jsonString, hasComment);
