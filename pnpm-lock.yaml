@@ -8,11 +8,15 @@ specifiers:
   jasmine-spec-reporter: ^7.0.0
   jsonminify: ^0.4.1
   mjs-dirname: ^1.0.0
+  node-addon-api: ^4.0.0
   parcel: ^2.0.0-beta.3.1
   prettier-config-atomic: ^2.0.5
   servor: ^4.0.2
   shx: 0.3.3
   strip-json-comments: ^3.1.1
+
+dependencies:
+  node-addon-api: 4.0.0
 
 devDependencies:
   '@types/jasmine': 3.7.7
@@ -4426,6 +4430,10 @@ packages:
   /node-addon-api/3.2.1:
     resolution: {integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==}
     dev: true
+
+  /node-addon-api/4.0.0:
+    resolution: {integrity: sha512-ALmRVBFzfwldBfk3SbKfl6+PVMXiCPKZBEfsJqB/EjXAMAI+MfFrEHR+GMRBuI162DihZ1QjEZ8ieYKuRCJ8Hg==}
+    dev: false
 
   /node-forge/0.10.0:
     resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}

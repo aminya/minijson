@@ -16,18 +16,38 @@ dependency "despacer" path="./src/native/despacer/bindings/d"
 configuration "executable" {
   targetType "executable"
   mainSourceFile "./src/native/cli.d"
+	excludedSourceFiles "./src/native/libc.d" "./src/node/node.d"
 }
 
 configuration "library" {
   targetType "library"
   targetName "minijson"
+	excludedSourceFiles "./src/native/cli.d" "./src/node/node.d"
+}
+
+configuration "node-executable" {
+	targetType "executable"
+	excludedSourceFiles "./src/native/cli.d" "./src/native/libc.d"
+
+	postGenerateCommands "node ./src/node/build.js"
+}
+
+configuration "node-lib" {
+	targetType "dynamicLibrary"
+	targetName "minijson.node"
+	mainSourceFile "./src/node/node.d"
+	excludedSourceFiles "./src/native/cli.d" "./src/native/libc.d"
+
+	dependency "node_dlang" version="0.4.12"
+
+	postGenerateCommands "node ./src/node/build.js"
 }
 
 configuration "benchmark" {
   targetType "executable"
   targetName "minijson-benchmark"
   mainSourceFile "./benchmark/benchmark.d"
-  excludedSourceFiles "src/native/cli.d" "src/native/libc.d"
+  excludedSourceFiles "src/native/libc.d" "src/native/cli.d"
 }
 
 # -------- Build Options and configurations --------

@@ -2,6 +2,8 @@
 	"fileVersion": 1,
 	"versions": {
 		"automem": "0.6.6",
+		"despacer": {"path":"src/native/despacer/bindings/d"},
+		"node_dlang": "0.4.12",
 		"test_allocator": "0.3.3",
 		"unit-threaded": "2.0.0"
 	}

@@ -1,15 +1,9 @@
 const { join, dirname } = require("path")
-const { renameSync, mkdirSync } = require("fs")
+const { renameSync, mkdirSync, existsSync } = require("fs")
 const { execFileSync } = require("child_process")
 
-const exeExtention = process.platform === "win32" ? ".exe" : ""
-const binName = `minijson${exeExtention}`
-
 const distFolder = join(dirname(dirname(__dirname)), "dist")
-const minijsonSource = join(distFolder, binName)
-
 const distPlatformFolder = join(distFolder, `${process.platform}-${process.arch}`)
-mkdirSync(distPlatformFolder, { recursive: true })
 
 function stripBin(file) {
   if (process.platform === "win32") {
@@ -17,8 +11,27 @@ function stripBin(file) {
   }
   return execFileSync(process.env.STRIP || "strip", [file, process.platform === "darwin" ? "-Sx" : "--strip-all"])
 }
-stripBin(minijsonSource)
 
+mkdirSync(distPlatformFolder, { recursive: true })
+
+// exe
+
+const exeExtention = process.platform === "win32" ? ".exe" : ""
+const binName = `minijson${exeExtention}`
+const minijsonSource = join(distFolder, binName)
 const minijsonDist = join(distPlatformFolder, binName)
 
-renameSync(minijsonSource, minijsonDist)
+if (existsSync(minijsonSource)) {
+  stripBin(minijsonSource)
+  renameSync(minijsonSource, minijsonDist)
+}
+
+// lib
+
+const libExtension = process.platform === "win32" ? ".dll" : ".so"
+const minijsonLibSource = join(distFolder, `${process.platform === "linux" ? "lib" : ""}minijson.node${libExtension}`)
+const minijsonLibDist = join(distPlatformFolder, `minijson.node`)
+
+if (existsSync(minijsonLibSource)) {
+  renameSync(minijsonLibSource, minijsonLibDist)
+}

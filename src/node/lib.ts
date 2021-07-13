@@ -1,5 +1,7 @@
-import { execFile } from "child_process"
 import { join } from "path"
+const minijsonLib = join(__dirname, `${process.platform}-${process.arch}`, "minijson.node")
+
+const nativeLib = require(minijsonLib) // eslint-disable-line @typescript-eslint/no-var-requires
 
 /**
  * Minify all the given JSON files in place. It minifies the files in parallel.
@@ -14,19 +16,7 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
   if (filesNum === 0) {
     return Promise.resolve()
   }
-
-  const args = [...files]
-  const spliceUpper = 2 * filesNum - 2
-
-  for (let iSplice = 0; iSplice <= spliceUpper; iSplice += 2) {
-    args.splice(iSplice, 0, "--file")
-  }
-
-  if (hasComment) {
-    args.push("--comment")
-  }
-
-  await spawnMinijson(args)
+  nativeLib.minifyFiles(files, hasComment)
 }
 
 /**
@@ -38,36 +28,6 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
 export async function minifyString(jsonString: string, hasComment = false): Promise<string> {
-  const args = ["--string", jsonString]
-  if (hasComment) {
-    args.push("--comment")
-  }
   // trim is needed due to using stdout for interop
-  return (await spawnMinijson(args)).trim()
-}
-
-const exeExtention = process.platform === "win32" ? ".exe" : ""
-const binName = `minijson${exeExtention}`
-
-const minijsonBin = join(__dirname, `${process.platform}-${process.arch}`, binName)
-
-/**
- * Spawn minijson with the given arguments
- *
- * @param args An array of arguments
- * @returns {Promise<string>} Returns a promise that resolves to stdout output string when the operation finishes
- * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
- */
-export function spawnMinijson(args: string[]): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    execFile(minijsonBin, args, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
-      }
-      if (stderr !== "") {
-        reject(stderr)
-      }
-      resolve(stdout)
-    })
-  })
+  return nativeLib.minifyFiles(jsonString, hasComment)
 }
