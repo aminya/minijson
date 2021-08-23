@@ -21,7 +21,7 @@ jobs:
         pnpm:
           - 6
         clang:
-          - 12
+          - 12.0.0
         cmake:
           - 3.20.2
         ninja:
