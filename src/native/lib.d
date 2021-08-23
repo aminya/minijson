@@ -1,6 +1,7 @@
 module minijson.lib;
 
 import std : ctRegex, matchAll, matchFirst;
+import bc.string: String;
 
 import despacer.simd_check : supports_sse4_1, supports_avx2;
 
@@ -22,7 +23,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
   auto in_string = false;
   auto in_multiline_comment = false;
   auto in_singleline_comment = false;
-  string result;
+  String result;
   size_t from = 0;
   auto rightContext = "";
 
@@ -99,7 +100,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     match.popFront();
   }
   result ~= rightContext;
-  return result;
+  return cast (string) result;
 }
 
 private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe @nogc
