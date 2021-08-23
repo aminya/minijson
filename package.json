@@ -18,7 +18,7 @@
     "lint": "eslint . --fix",
     "test.lint": "eslint .",
     "test": "jasmine ./test/index-test.mjs",
-    "clean": "shx rm -rf dist",
+    "clean": "shx rm -rf ./dist ./src/native/despacer/build/",
     "build": "dub build --config=executable",
     "build.release": "pnpm build -- --build release-nobounds --compiler=ldc2",
     "build.profile": "pnpm build -- --build profile --compiler=ldc2 && node ./src/node/build.js && npm run build.node.js",
