@@ -56,15 +56,6 @@ jobs:
           cmake: ${{ matrix.cmake }}
           ninja: ${{ matrix.ninja }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm }}
-
       - name: Setup D
         uses: dlang-community/setup-dlang@v1
         with:
@@ -72,7 +63,7 @@ jobs:
 
       - name: Setup Mac Arm64
         shell: bash
-        if: contains(matrix.os, 'macos-11') 
+        if: contains(matrix.os, 'macos-11')
         run: |
           ARCH="arm64"
           echo "ARCH=$ARCH" >> $GITHUB_ENV
@@ -81,6 +72,33 @@ jobs:
           echo "CPPFLAGS=$CPPFLAGS -arch $ARCH" >> $GITHUB_ENV
           echo "CFLAGS=$CFLAGS -arch $ARCH" >> $GITHUB_ENV
           echo "LDFLAGS=$LDFLAGS -arch $ARCH" >> $GITHUB_ENV
+
+          # Manually install ldc 
+          # Due to https://github.com/dlang-community/setup-dlang/issues/51
+          curl -LJO https://github.com/ldc-developers/ldc/releases/download/v1.28.0/ldc2-1.28.0-osx-$ARCH.tar.xz
+          tar -xf ldc2-1.28.0-osx-$ARCH.tar.xz
+          rm ldc2-1.28.0-osx-$ARCH.tar.xz
+
+          LDC_PATH="~/ldc"
+          mkdir -p $LDC_PATH
+          mv ldc2-1.28.0-osx-$ARCH $LDC_PATH
+
+          # Activate ldc
+          echo "LIBRARY_PATH=$LDC_PATH/lib${LIBRARY_PATH:+:}${LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$LDC_PATH/lib${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "PATH=$LDC_PATH/bin${PATH:+:}${PATH:-}" >> $GITHUB_ENV
+          echo "DMD=ldmd2" >> $GITHUB_ENV
+          echo "DC=ldc2" >> $GITHUB_ENV
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm }}
 
       # Build and Test
 
