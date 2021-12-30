@@ -27,8 +27,6 @@ jobs:
           - "3.22.1"
         ninja:
           - "1.10.2"
-    env:
-      ARCH: x86_64 # default arch
     steps:
       - uses: actions/checkout@v2
         with:
@@ -108,10 +106,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: |
-          dub build --config=executable --build release-nobounds --compiler=ldc2 --arch=${{ env.ARCH }}
-          node ./src/node/build.js 
-          pnpm run build.node.js
+        run: pnpm build.node
 
       - name: Test
         run: pnpm test
