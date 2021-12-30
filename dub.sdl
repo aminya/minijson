@@ -9,7 +9,7 @@ targetPath "./dist"
 sourcePaths "./src/native"
 importPaths "./src/native"
 
-dependency "automem" version="~>0.6.6"
+dependency "automem" version="0.6.7"
 preGenerateCommands "git submodule update --init" # despacer download
 dependency "despacer" path="./src/native/despacer/bindings/d"
 

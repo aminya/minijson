@@ -34,16 +34,18 @@
     "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson",
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
   },
+  "dependencies": {
+    "jsonminify": "^0.4.2"
+  },
   "devDependencies": {
-    "@types/jasmine": "^3.9.1",
-    "@types/node": "16.9.4",
-    "eslint-config-atomic": "^1.16.2",
-    "jasmine": "^3.9.0",
+    "@types/jasmine": "^3.10.2",
+    "@types/node": "17.0.5",
+    "eslint-config-atomic": "^1.16.5",
+    "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "jsonminify": "^0.4.1",
     "mjs-dirname": "^1.0.0",
-    "parcel": "^2.0.0-rc.0",
-    "prettier-config-atomic": "^2.0.5",
+    "parcel": "^2.0.1",
+    "prettier-config-atomic": "^3.0.1",
     "servor": "^4.0.2",
     "shx": "0.3.3",
     "strip-json-comments": "^4.0.0"
