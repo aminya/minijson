@@ -1,4 +1,5 @@
 import { execFile } from "child_process"
+import { readFile, writeFile } from "fs/promises";
 import { join } from "path"
 
 /**
@@ -10,6 +11,17 @@ import { join } from "path"
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
 export async function minifyFiles(files: string[], hasComment = false): Promise<void> {
+  if (process.platform === "darwin" && process.arch === "arm64") {
+    // fallback to jasonminify due to missing ARM64 binaries
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const jsonminify = require("jsonminify");
+    files.map(async (file) => {
+      const jsonString = await readFile(file, 'utf8');
+      const minifiedJsonString = jsonminify(jsonString) as string;
+      await writeFile(file, minifiedJsonString);
+    })
+  }
+
   const filesNum = files.length
   if (filesNum === 0) {
     return Promise.resolve()

@@ -14,25 +14,19 @@ jobs:
           - windows-latest
           - macos-latest
           - ubuntu-latest
+          # - macos-11 # arm64
         d:
-          - "ldc-1.27.1"
+          - "ldc-1.28.0"
         node:
           - 16
         pnpm:
           - 6
-        clang:
-          - 12.0.0
+        compiler:
+          - llvm-12.0.0
         cmake:
-          - 3.20.2
+          - "3.22.1"
         ninja:
-          - 1.10.2
-        CC:
-          - clang
-        CXX:
-          - clang++
-    env:
-      CC: ${{ matrix.CC }}
-      CXX: ${{ matrix.CXX }}
+          - "1.10.2"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -49,39 +43,62 @@ jobs:
             ~/.pnpm-store
             D:\.pnpm-store
             ./.dub
-            ./llvm
-            C:/Program Files/LLVM
-          key: "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-Clang:${{ matrix.clang }}-dub:${{ hashFiles('./dub.selections.json')}}-pnpm:${{ hashFiles('./pnpm-lock.yaml') }}"
+            ~/llvm
+          key: "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-CXX:${{ matrix.compiler }}-dub:${{ hashFiles('./dub.selections.json')}}-pnpm:${{ hashFiles('./pnpm-lock.yaml') }}"
           restore-keys: |
-            "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-Clang:${{ matrix.clang }}"
+            "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-CXX:${{ matrix.compiler }}"
 
       # Setup compilers and tools
-
-      - name: Setup LLVM
-        uses: KyleMayes/install-llvm-action@v1
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
         with:
-          version: ${{ matrix.clang }}
-          cached: ${{ steps.cache.outputs.cache-hit }}
-
-      - name: Setup Cmake and Ninja
-        uses: aminya/install-cmake@new-versions-and-arch
-        with:
+          compiler: ${{ matrix.compiler }}
           cmake: ${{ matrix.cmake }}
           ninja: ${{ matrix.ninja }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ matrix.pnpm }}
 
       - name: Setup D
         uses: dlang-community/setup-dlang@v1
         with:
           compiler: ${{ matrix.d }}
+
+      - name: Setup Mac Arm64
+        shell: bash
+        if: contains(matrix.os, 'macos-11')
+        run: |
+          ARCH="arm64"
+          echo "ARCH=$ARCH" >> $GITHUB_ENV
+          echo "triple=$ARCH-apple-macos" >> $GITHUB_ENV
+          echo "DFLAGS='-mtriple=$triple -Xcc=target -Xcc=$ARCH-apple-macos'" >> $GITHUB_ENV
+          echo "CPPFLAGS=$CPPFLAGS -arch $ARCH" >> $GITHUB_ENV
+          echo "CFLAGS=$CFLAGS -arch $ARCH" >> $GITHUB_ENV
+          echo "LDFLAGS=$LDFLAGS -arch $ARCH" >> $GITHUB_ENV
+
+          # Manually install ldc 
+          # Due to https://github.com/dlang-community/setup-dlang/issues/51
+          curl -LJO https://github.com/ldc-developers/ldc/releases/download/v1.28.0/ldc2-1.28.0-osx-$ARCH.tar.xz
+          tar -xf ldc2-1.28.0-osx-$ARCH.tar.xz
+          rm ldc2-1.28.0-osx-$ARCH.tar.xz
+
+          LDC_PATH="~/ldc"
+          mkdir -p $LDC_PATH
+          mv ldc2-1.28.0-osx-$ARCH $LDC_PATH
+
+          # Activate ldc
+          echo "LIBRARY_PATH=$LDC_PATH/lib${LIBRARY_PATH:+:}${LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$LDC_PATH/lib${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH:-}" >> $GITHUB_ENV
+          echo "PATH=$LDC_PATH/bin${PATH:+:}${PATH:-}" >> $GITHUB_ENV
+          echo "DMD=ldmd2" >> $GITHUB_ENV
+          echo "DC=ldc2" >> $GITHUB_ENV
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm }}
 
       # Build and Test
 
