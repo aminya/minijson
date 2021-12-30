@@ -20,6 +20,7 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
       const minifiedJsonString = jsonminify(jsonString) as string;
       await writeFile(file, minifiedJsonString);
     })
+    return
   }
 
   const filesNum = files.length
