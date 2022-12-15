@@ -12,6 +12,7 @@ importPaths "./src/native"
 dependency "automem" version="0.6.7"
 preGenerateCommands "git submodule update --init" # despacer download
 dependency "despacer" path="./src/native/despacer/bindings/d"
+dependency "bc-string" version="1.2.2"
 
 configuration "executable" {
   targetType "executable"
