@@ -12,7 +12,7 @@ import minijson.lib : minifyString;
   Return:
     the minified json string
 */
-extern (C) auto c_minifyString(in char* jsonCString, in bool hasComment = false)
+extern (C) auto c_minifyString(char* jsonCString, bool hasComment = false)
 {
   import std : fromStringz, toStringz;
 
