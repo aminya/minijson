@@ -15,11 +15,11 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
     // fallback to jasonminify due to missing ARM64 binaries
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jsonminify = require("jsonminify")
-    files.map(async (file) => {
+    await Promise.all(files.map(async (file) => {
       const jsonString = await readFile(file, "utf8")
       const minifiedJsonString = jsonminify(jsonString) as string
       await writeFile(file, minifiedJsonString)
-    })
+    }))
     return
   }
 
