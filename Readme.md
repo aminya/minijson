@@ -111,18 +111,22 @@ Benchmark minifyFiles
 ### Contributing
 
 You would need to install the ldc compiler for the D programming language
+
 ```
 curl -fsS https://dlang.org/install.sh | bash -s ldc
 ```
-After installation, it will print a message about activating it. Something like `source activate_ldc.sh`. 
+
+After installation, it will print a message about activating it. Something like `source activate_ldc.sh`.
 
 After running the activation command, clone the repository:
+
 ```
 git clone --recurse-submodules https://github.com/aminya/minijson
 cd minijson
 ```
 
 Then build with:
+
 ```
 pnpm install
 pnpm build.node

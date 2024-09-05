@@ -12,7 +12,7 @@ console.log("Benchmark minifyString")
 const filesContents = await Promise.all(
   standardFiles.map(async (jsonFile) => {
     return readFile(jsonFile, "utf8")
-  })
+  }),
 )
 
 const t11 = performance.now()
@@ -33,7 +33,7 @@ await Promise.all(
     const jsonString = await readFile(jsonFile, "utf8")
     const data = await jsonMinify(jsonString)
     return await writeFile(jsonFile, data)
-  })
+  }),
 )
 
 const t2 = performance.now()

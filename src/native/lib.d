@@ -47,7 +47,8 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
       const noLeftContext = leftContextSubstr.length == 0;
-      if (!noLeftContext) {
+      if (!noLeftContext)
+      {
         if (!in_string)
         {
           leftContextSubstr = remove_spaces(leftContextSubstr);

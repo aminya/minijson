@@ -1,5 +1,5 @@
 import { execFile } from "child_process"
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises"
 import { join } from "path"
 
 /**
@@ -14,11 +14,11 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
   if (process.platform === "darwin" && process.arch === "arm64") {
     // fallback to jasonminify due to missing ARM64 binaries
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const jsonminify = require("jsonminify");
+    const jsonminify = require("jsonminify")
     files.map(async (file) => {
-      const jsonString = await readFile(file, 'utf8');
-      const minifiedJsonString = jsonminify(jsonString) as string;
-      await writeFile(file, minifiedJsonString);
+      const jsonString = await readFile(file, "utf8")
+      const minifiedJsonString = jsonminify(jsonString) as string
+      await writeFile(file, minifiedJsonString)
     })
     return
   }
