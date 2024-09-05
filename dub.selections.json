@@ -3,7 +3,7 @@
 	"versions": {
 		"automem": "0.6.7",
 		"despacer": {"path":"src/native/despacer/bindings/d"},
-		"test_allocator": "0.3.3",
-		"unit-threaded": "2.0.3"
+		"test_allocator": "0.3.4",
+		"unit-threaded": "2.2.0"
 	}
 }
