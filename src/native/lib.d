@@ -121,9 +121,9 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
   return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(const ref string matchFrontHit) @safe
+private bool notSlashAndNoSpaceOrBreak(const ref string str) @safe
 {
-  return matchFrontHit != "\"" && hasNoSpace(matchFrontHit);
+  return str != "\"" && hasNoSpace(str);
 }
 
 /** Removes spaces from the original string */
@@ -141,24 +141,24 @@ private string remove_spaces(string str) @trusted nothrow
   else
   {
     const spaceOrBreakRegex = ctRegex!(`\s`);
-    leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+    str.replaceAll(spaceOrBreakRegex, "");
   }
 }
 
 /** Check if the given string has space  */
-private bool hasNoSpace(const ref string matchFrontHit) @trusted
+private bool hasNoSpace(const ref string str) @trusted
 {
   static if (supports_avx2())
   {
     import despacer.despacer : avx2_hasspace;
 
     // the algorithm never checks for zero termination so toStringz is not needed
-    return !avx2_hasspace(cast(const char*) matchFrontHit, matchFrontHit.length);
+    return !avx2_hasspace(cast(const char*) str, str.length);
   }
   else
   {
     const spaceOrBreakRegex = ctRegex!(`\s`);
-    return matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+    return str.matchFirst(spaceOrBreakRegex).empty();
   }
 }
 
