@@ -1,48 +1,65 @@
 module minijson.cli;
 
-import minijson.lib : minifyFiles, minifyString;
+import minijson.lib : minifyFiles, minifyStrings;
+import argparse;
 
-import std.getopt : getopt, defaultGetoptPrinter, GetoptResult;
+@(Command("minijson")
+    .Description(`minijson: minify json files with support for comments
 
-/** Print help */
-void printHelp(GetoptResult optResult) @trusted
-{
-  return defaultGetoptPrinter(`minijson: minify json files with support for comments
-    minijson --file file1.json --file file2.json
-    minijson --file file1_with_comment.json --file file2_with_comment.json --comment
+    # Minify the specified files
+    minijson ./dist/**/*.json ./build/a.json
 
-    minijson --string '{"some_json": "string_here"}'
-    minijson --string '{"some_json": "string_here"} //comment' --comment
+    # Minify the specified files (supports comments)
+    minijson --comment file1_with_comment.json file2_with_comment.json
+
+    # Minify the specified json string
+    minijson --str '{"some_json": "string_here"}'
+
+    # Minify the specified json string (supports comments)
+    minijson --comment --str '{"some_json": "string_here"} //comment'
 
     More information at https://github.com/aminya/minijson
-  `, optResult.options);
-}
-
-void main(string[] args) @trusted
+  `)
+)
+struct Options
 {
-  string[] files;
-  string jsonString;
-  bool hasComment = false;
-
-  auto optResult = getopt(args, "file", "an array of files to minify", &files, "string",
-      "a json string to minify", &jsonString, "comment", "a flag to support comments in json", &hasComment);
-
-  if (optResult.helpWanted || (!files && !jsonString))
-  {
-    return printHelp(optResult);
-  }
-
-  // minify the given files
-  if (files)
-  {
-    minifyFiles(files, hasComment);
-  }
-
-  // minify the given string and print to stdout
-  if (jsonString)
-  {
-    import std : write;
-
-    write(minifyString(jsonString, hasComment));
-  }
+  @TrailingArguments string[] files;
+  bool comment = false;
+  string[] str;
+  // (Deprecated) A list of files to minify (for backwards compatiblitity with getopt)
+  string[] file;
 }
+
+int actualMain(Options opts) @trusted
+{
+  try
+  {
+    // minify the given files
+    if (opts.files.length > 0 || opts.file.length > 0)
+    {
+      const auto files = opts.files ~ opts.file;
+      minifyFiles(files, opts.comment);
+    }
+
+    // minify the given string and print to stdout
+    if (opts.str)
+    {
+      import std.algorithm : each;
+      import std.stdio : writeln;
+
+      minifyStrings(opts.str, opts.comment).each!writeln;
+
+    }
+  }
+  catch (Exception e)
+  {
+    import std.stdio : stderr;
+
+    stderr.writeln("Error: ", e.msg);
+    return 1;
+  }
+
+  return 0;
+}
+
+mixin CLI!Options.main!((args) { return actualMain(args); });

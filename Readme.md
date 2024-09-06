@@ -32,21 +32,33 @@ dub build --config=executable --build=release-nobounds --compiler=ldc2
 ### CLI Usage
 
 ```shell
-❯ minijson --help
+> minijson --help
+
+Usage: minijson [--files FILES ...] [--comment] [--str STR ...] [--file FILE ...] [-h]
 
 minijson: minify json files with support for comments
-    minijson --file file1.json --file file2.json
-    minijson --file file1_with_comment.json --file file2_with_comment.json --comment
 
-    minijson --string '{"some_json": "string_here"}'
-    minijson --string '{"some_json": "string_here"} //comment' --comment
+    # Minify the specified files
+    minijson ./dist/**/*.json ./build/a.json
+
+    # Minify the specified files (supports comments)
+    minijson --comment file1_with_comment.json file2_with_comment.json
+
+    # Minify the specified json string
+    minijson --str '{"some_json": "string_here"}'
+
+    # Minify the specified json string (supports comments)
+    minijson --comment --str '{"some_json": "string_here"} //comment'
 
     More information at https://github.com/aminya/minijson
 
-      --file an array of files to minify
-    --string a json string to minify
-   --comment a flag to support comments in json
--h    --help This help information.
+
+Optional arguments:
+  --files FILES ...
+  --comment
+  --str STR ...
+  --file FILE ...
+  -h, --help           Show this help message and exit
 ```
 
 ### Node API

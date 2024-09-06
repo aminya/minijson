@@ -163,16 +163,65 @@ private bool hasNoSpace(const ref string str) @trusted
 }
 
 /**
+  Minify the given JSON strings in parallel
+
+  Params:
+    jsonStrings  = the json strings you want to minify
+    hasComment = a boolean to support comments in json. Default: `false`.
+
+  Return:
+    the minified json strings
+*/
+string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @trusted
+{
+  import std.algorithm: map;
+  import std.array: array;
+
+  return jsonStrings.map!(jsonString => minifyString(jsonString, hasComment)).array();
+}
+
+/**
   Minify the given files in place. It minifies the files in parallel.
 
   Params:
-    files = the paths to the files.
+    paths = the paths to the files. It could be glob patterns.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(in string[] files, in bool hasComment = false)
+void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
 {
   import std.parallelism : parallel;
-  import std.file : readText, write;
+  import std.algorithm;
+  import std.array;
+  import std.file : dirEntries, SpanMode, readText, write, isFile, isDir, exists;
+  import std.path : globMatch;
+  import glob : glob;
+  import std.stdio : writeln;
+
+  // get the files from the given paths (resolve glob patterns)
+  auto files = paths
+    .map!((path) {
+      if (path.exists)
+      {
+        if (path.isFile)
+        {
+          return [path];
+        }
+        else if (path.isDir)
+        {
+          return glob(path ~ "/**/*.json");
+        }
+        else
+        {
+          throw new Exception("The given path is not a file or a directory: " ~ path);
+        }
+      }
+      else
+      {
+        return glob(path);
+      }
+    })
+    .joiner()
+    .array();
 
   foreach (file; files.parallel())
   {

@@ -51,7 +51,7 @@ export async function minifyFiles(files: string[], hasComment = false): Promise<
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
 export async function minifyString(jsonString: string, hasComment = false): Promise<string> {
-  const args = ["--string", jsonString]
+  const args = ["--str", jsonString]
   if (hasComment) {
     args.push("--comment")
   }
