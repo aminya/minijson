@@ -38,7 +38,8 @@ buildType "release-nobounds" {
   buildOptions "releaseMode" "optimize" "inline" "noBoundsCheck"
 
   # link time optimizations
-  dflags "--flto=full" "--ffast-math" platfrom="ldc"
+  dflags "--flto=full" "--ffast-math" platform="windows-ldc"
+  dflags "--flto=full" "--ffast-math" platform="linux-ldc"
 }
 
 buildType "debug-sanitize-address" platform="ldc" {
