@@ -1,4 +1,4 @@
 [submodule "despacer"]
 	path = despacer
-	url = https://github.com/aminya/despacer.git
-	branch = fix-dub
+	url = https://github.com/lemire/despacer.git
+	branch = master
