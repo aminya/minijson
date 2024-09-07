@@ -1,4 +1,5 @@
 import { execFile } from "child_process"
+import { chmodSync } from "fs"
 import { readFile, writeFile } from "fs/promises"
 import { join } from "path"
 
@@ -63,6 +64,11 @@ const exeExtention = process.platform === "win32" ? ".exe" : ""
 const binName = `minijson${exeExtention}`
 
 const minijsonBin = join(__dirname, `${process.platform}-${process.arch}`, binName)
+
+// chmod as executable on non-windows
+if (process.platform !== "win32") {
+  chmodSync(minijsonBin, 0o755)
+}
 
 /**
  * Spawn minijson with the given arguments
