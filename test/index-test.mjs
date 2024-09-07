@@ -15,9 +15,8 @@ describe("minijson", () => {
     const fixtureNum = pathInfo.length
     for (let iFixture = 0; iFixture !== fixtureNum; ++iFixture) {
       it(pathInfo[iFixture].originalFile, () => {
-        const originalObject = originalInfo[iFixture].originalObject
-        const minifiedObject = resultInfo[iFixture].minifiedObject
-        expect(minifiedObject).toEqual(originalObject)
+        expect(resultInfo[iFixture].minifiedObject).toEqual(originalInfo[iFixture].originalObject)
+        expect(resultInfo[iFixture].minifiedString).toEqual(JSON.stringify(originalInfo[iFixture].originalObject))
       })
     }
 
@@ -34,6 +33,7 @@ describe("minijson", () => {
     for (let iFixture = 0; iFixture !== fixtureNum; ++iFixture) {
       it(pathInfo[iFixture].originalFile, () => {
         expect(resultInfo[iFixture].minifiedObject).toEqual(originalInfo[iFixture].originalObject)
+        expect(resultInfo[iFixture].minifiedString).toEqual(JSON.stringify(originalInfo[iFixture].originalObject))
       })
     }
 
