@@ -83,11 +83,6 @@ jobs:
       - name: Build
         run: pnpm build.node
 
-      - name: Inspect Despacer
-        if: always()
-        shell: bash
-        run: ls ./despacer/build
-
       - name: Test
         run: pnpm test
 
