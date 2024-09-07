@@ -1,6 +1,6 @@
 {
   "name": "@aminya/minijson",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minify JSON files blazing fast! Supports Comments. Uses D, C, and AVX2 and SSE4_1 SIMD",
   "homepage": "https://github.com/aminya/minijson",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "format": "prettier -l --cache --write . && pnpm run format.d",
     "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
     "lint": "eslint . --fix",
-    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.* && chmod +x ./dist/*/minijson",
     "start.benchmark.node": "node ./benchmark/native-benchmark.mjs",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
