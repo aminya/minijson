@@ -23,22 +23,20 @@ import argparse;
 )
 struct Options
 {
-  @TrailingArguments string[] files;
   bool comment = false;
   string[] str;
   // (Deprecated) A list of files to minify (for backwards compatiblitity with getopt)
   string[] file;
 }
 
-int actualMain(Options opts) @trusted
+int actualMain(Options opts, string[] files) @trusted
 {
   try
   {
     // minify the given files
-    if (opts.files.length > 0 || opts.file.length > 0)
+    if (files.length > 0 || opts.file.length > 0)
     {
-      const auto files = opts.files ~ opts.file;
-      minifyFiles(files, opts.comment);
+      minifyFiles(files ~ opts.file, opts.comment);
     }
 
     // minify the given string and print to stdout
@@ -62,4 +60,4 @@ int actualMain(Options opts) @trusted
   return 0;
 }
 
-mixin CLI!Options.main!((args) { return actualMain(args); });
+mixin CLI!Options.main!((opts, unparsed) { return actualMain(opts, unparsed); });
