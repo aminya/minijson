@@ -4,7 +4,7 @@ on:
   - push
 
 jobs:
-  Test:
+  build:
     if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -91,3 +91,12 @@ jobs:
         with:
           name: minijson-${{ runner.os }}-${{ runner.arch }}
           path: ./dist
+
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          delete-merged: true
