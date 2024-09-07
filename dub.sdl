@@ -10,8 +10,11 @@ sourcePaths "./src/native"
 importPaths "./src/native"
 
 dependency "automem" version="0.6.7"
+dependency "despacer" path="despacer"
+dependency "d-glob" version="~>0.4.0"
+dependency "argparse" version="~>1.3.0"
+
 preGenerateCommands "git submodule update --init" # despacer download
-dependency "despacer" path="./src/native/despacer/bindings/d"
 
 configuration "executable" {
   targetType "executable"
@@ -32,16 +35,14 @@ configuration "benchmark" {
 
 # -------- Build Options and configurations --------
 
-// enables all disp except =nosharedaccess
-dflags "-vgc" "-preview=dip25" "-preview=dip1000" "-preview=dip1008" "-preview=fieldwise" "-preview=fixAliasThis" "-preview=intpromote" "-preview=rvaluerefparam" "-preview=in"
-/* dflags "-preview=inclusiveincontracts" platform="dmd" // only on dmd */
-/* dflags "-preview=dip1021" platform="posix-ldc" //  "breaks the build */
+// dflags "-vgc"
 
 buildType "release-nobounds" {
   buildOptions "releaseMode" "optimize" "inline" "noBoundsCheck"
 
   # link time optimizations
-  dflags "--flto=full" "--ffast-math" platfrom="ldc"
+  dflags "--flto=full" "--ffast-math" platform="windows-ldc"
+  dflags "--flto=full" "--ffast-math" platform="linux-ldc"
 }
 
 buildType "debug-sanitize-address" platform="ldc" {

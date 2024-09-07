@@ -1,4 +1,4 @@
-[submodule "src/native/despacer"]
-	path = src/native/despacer
-	url = https://github.com/aminya/despacer
-	branch = minijson
+[submodule "despacer"]
+	path = despacer
+	url = https://github.com/aminya/despacer.git
+	branch = master

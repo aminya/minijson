@@ -47,7 +47,8 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
       const noLeftContext = leftContextSubstr.length == 0;
-      if (!noLeftContext) {
+      if (!noLeftContext)
+      {
         if (!in_string)
         {
           leftContextSubstr = remove_spaces(leftContextSubstr);
@@ -120,13 +121,13 @@ private bool hasNoSlashOrEvenNumberOfSlashes(in string leftContextSubstr) @safe 
   return slashCount % 2 == 0;
 }
 
-private bool notSlashAndNoSpaceOrBreak(const ref string matchFrontHit) @safe
+private bool notSlashAndNoSpaceOrBreak(const ref string str) @safe
 {
-  return matchFrontHit != "\"" && hasNoSpace(matchFrontHit);
+  return str != "\"" && hasNoSpace(str);
 }
 
 /** Removes spaces from the original string */
-private string remove_spaces(string str) @trusted nothrow
+private string remove_spaces(string str) @trusted
 {
   static if (supports_sse4_1())
   {
@@ -139,39 +140,92 @@ private string remove_spaces(string str) @trusted nothrow
   }
   else
   {
+    import std.regex : replaceAll;
+
     const spaceOrBreakRegex = ctRegex!(`\s`);
-    leftContextSubstr.replaceAll(spaceOrBreakRegex, "");
+    return str.replaceAll(spaceOrBreakRegex, "");
   }
 }
 
 /** Check if the given string has space  */
-private bool hasNoSpace(const ref string matchFrontHit) @trusted
+private bool hasNoSpace(const ref string str) @trusted
 {
   static if (supports_avx2())
   {
     import despacer.despacer : avx2_hasspace;
 
     // the algorithm never checks for zero termination so toStringz is not needed
-    return !avx2_hasspace(cast(const char*) matchFrontHit, matchFrontHit.length);
+    return !avx2_hasspace(cast(const char*) str, str.length);
   }
   else
   {
+    import std.regex : matchFirst;
+
     const spaceOrBreakRegex = ctRegex!(`\s`);
-    return matchFrontHit.matchFirst(spaceOrBreakRegex).empty();
+    return str.matchFirst(spaceOrBreakRegex).empty();
   }
+}
+
+/**
+  Minify the given JSON strings in parallel
+
+  Params:
+    jsonStrings  = the json strings you want to minify
+    hasComment = a boolean to support comments in json. Default: `false`.
+
+  Return:
+    the minified json strings
+*/
+string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @trusted
+{
+  import std.algorithm : map;
+  import std.array : array;
+
+  return jsonStrings.map!(jsonString => minifyString(jsonString, hasComment)).array();
 }
 
 /**
   Minify the given files in place. It minifies the files in parallel.
 
   Params:
-    files = the paths to the files.
+    paths = the paths to the files. It could be glob patterns.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(in string[] files, in bool hasComment = false)
+void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
 {
   import std.parallelism : parallel;
-  import std.file : readText, write;
+  import std.algorithm;
+  import std.array;
+  import std.file : dirEntries, SpanMode, readText, write, isFile, isDir, exists;
+  import std.path : globMatch;
+  import glob : glob;
+  import std.stdio : writeln;
+
+  // get the files from the given paths (resolve glob patterns)
+  auto files = paths
+    .map!((path) {
+      if (path.exists)
+      {
+        if (path.isFile)
+        {
+          return [path];
+        }
+        else if (path.isDir)
+        {
+          return glob(path ~ "/**/*.json");
+        }
+        else
+        {
+          throw new Exception("The given path is not a file or a directory: " ~ path);
+        }
+      }
+      else
+      {
+        return glob(path);
+      }
+    })
+    .joiner()
+    .array();
 
   foreach (file; files.parallel())
   {

@@ -1,65 +1,58 @@
 {
   "name": "@aminya/minijson",
-  "author": "Amin Yahyaabdi",
   "version": "0.6.2",
   "description": "Minify JSON files blazing fast! Supports Comments. Uses D, C, and AVX2 and SSE4_1 SIMD",
   "homepage": "https://github.com/aminya/minijson",
   "license": "MIT",
+  "author": "Amin Yahyaabdi",
+  "main": "./dist/lib.js",
+  "browser": "./dist/index.html",
+  "bin": "./dist/cli.js",
   "files": [
     "dist/**/*"
   ],
-  "main": "./dist/lib.js",
-  "bin": "./dist/cli.js",
-  "browser": "./dist/index.html",
   "scripts": {
-    "format": "prettier --write . && npm run format.d",
-    "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
-    "test.format": "prettier . --check",
-    "lint": "eslint . --fix",
-    "test.lint": "eslint .",
-    "test": "jasmine ./test/index-test.mjs",
-    "clean": "shx rm -rf ./dist ./src/native/despacer/build/",
     "build": "dub build --config=executable",
-    "build.release": "pnpm build -- --build release-nobounds --compiler=ldc2",
-    "build.profile": "pnpm build -- --build profile --compiler=ldc2 && node ./src/node/build.js && npm run build.node.js",
     "build.benchmark": "dub build --config=benchmark --build release-nobounds --compiler=ldc2",
-    "start.profile": "shx rm -rf ./trace.* && npm run start.benchmark.node && profdump.exe --dot trace.log trace.dot && dot -Tsvg trace.dot -o trace.svg && ./trace.svg",
-    "build.node": "npm run build.release && node ./src/node/build.js && npm run build.node.js",
+    "build.browser": "pnpm run build.wasm && parcel build --target browser ./src/browser/index.html",
+    "build.node": "pnpm run build.release && node ./src/node/build.js && pnpm run build.node.js",
     "build.node.js": "tsc -p ./src/node/tsconfig.json",
+    "build.profile": "pnpm build --build profile --compiler=ldc2 && node ./src/node/build.js && pnpm run build.node.js",
+    "build.release": "pnpm build --build release-nobounds --compiler=ldc2",
     "build.wasm": "ldc2 ./src/wasm/wasm.d ./src/native/lib.d --od ./dist --O3 --mtriple=wasm32-unknown-unknown-wasm",
-    "build.browser": "npm run build.wasm && parcel build --target browser ./src/browser/index.html",
-    "start.browser": "servor ./dist/ --browse --reload",
+    "clean": "shx rm -rf ./dist ./despacer/build/ ./test/fixtures/*/*-minified.json",
+    "format": "prettier -l --cache --write . && pnpm run format.d",
+    "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
+    "lint": "eslint . --fix",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*",
     "start.benchmark.node": "node ./benchmark/native-benchmark.mjs",
+    "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
-    "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson",
-    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.*"
+    "start.profile": "shx rm -rf ./trace.* && pnpm run start.benchmark.node && profdump.exe --dot trace.log trace.dot && dot -Tsvg trace.dot -o trace.svg && ./trace.svg",
+    "test": "pnpm run build.node && jasmine ./test/index-test.mjs",
+    "test.format": "prettier -l --cache . --check",
+    "test.lint": "eslint .",
+    "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson"
   },
+  "prettier": "prettier-config-atomic",
   "dependencies": {
     "jsonminify": "^0.4.2"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.10.2",
-    "@types/node": "17.0.5",
-    "eslint-config-atomic": "^1.16.5",
-    "jasmine": "^3.10.0",
+    "@types/jasmine": "^5.1.4",
+    "@types/node": "22.5.4",
+    "eslint-config-atomic": "^1.22.1",
+    "jasmine": "^5.2.0",
     "jasmine-spec-reporter": "^7.0.0",
     "mjs-dirname": "^1.0.0",
-    "parcel": "^2.0.1",
-    "prettier-config-atomic": "^3.0.1",
+    "parcel": "^2.12.0",
+    "prettier-config-atomic": "^4.0.0",
     "servor": "^4.0.2",
-    "shx": "0.3.3",
-    "strip-json-comments": "^4.0.0"
+    "shx": "0.3.4",
+    "strip-json-comments": "^5.0.1",
+    "typescript": "^5.5.4",
+    "undici-types": "^6.19.8"
   },
-  "targets": {
-    "browser": {
-      "context": "browser",
-      "engines": {
-        "browsers": "Chrome 76"
-      },
-      "includeNodeModules": true
-    }
-  },
-  "prettier": "prettier-config-atomic",
   "keywords": [
     "json",
     "minify",
@@ -79,7 +72,6 @@
     "strip",
     "trim",
     "parse",
-    "jsonc",
     "json5",
     "js",
     "build",
@@ -101,5 +93,11 @@
     "avx2",
     "rust",
     "bandwith"
-  ]
+  ],
+  "targets": {
+    "browser": {
+      "context": "browser",
+      "includeNodeModules": true
+    }
+  }
 }

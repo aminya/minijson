@@ -19,7 +19,7 @@ export async function minifyFixtures(jsonFiles, hasComment) {
       }
       const originalObject = JSON.parse(originalString)
       return { originalString, originalObject }
-    })
+    }),
   )
 
   const minifiedFiles = pathInfo.map((pathInfo) => pathInfo.minifiedFile)
@@ -42,7 +42,7 @@ export async function minifyFixtures(jsonFiles, hasComment) {
         return { minifiedString, minifiedObject: {} }
       }
       return { minifiedString, minifiedObject }
-    })
+    }),
   )
 
   return { pathInfo, originalInfo, resultInfo }

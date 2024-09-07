@@ -5,3 +5,4 @@ CHANGELOG.md
 dist
 test/fixtures/*-minified.json
 dub.selections.json
+/despacer/

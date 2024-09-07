@@ -8,5 +8,5 @@ jasmine.getEnv().addReporter(
       displayPending: true,
       displayFailed: true,
     },
-  })
+  }),
 )
