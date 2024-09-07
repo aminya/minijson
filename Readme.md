@@ -8,28 +8,40 @@ Minify JSON files **blazing fast**! Supports Comments. Uses D, C, and AVX2 and S
 
 ### Installation
 
-- Nodejs
+- Npm (Nodejs)
 
-```
+```shell
 npm install @aminya/minijson
 ```
 
-- Native CLI Binaries (Windows, MacOS, Linux)
+- Dub (D)
 
-You can download the native binaries for the CLI from the release page:
-
-https://github.com/aminya/minijson/releases/tag/v0.6.0
-
-- Dub
-
-```
+```shell
 git submodule update --init --recursive
 dub build --config=library --build=release-nobounds --compiler=ldc2
 # or
 dub build --config=executable --build=release-nobounds --compiler=ldc2
 ```
 
+- Download Native Binaries from
+https://github.com/aminya/minijson/releases/latest
+
+
 ### CLI Usage
+
+```shell
+# Minify the specified files
+minijson ./dist/**/*.json ./build/a.json
+
+# Minify the specified files (supports comments)
+minijson --comment file1_with_comment.json file2_with_comment.json
+
+# Minify the specified json string
+minijson --str '{"some_json": "string_here"}'
+
+# Minify the specified json string (supports comments)
+minijson --comment --str '{"some_json": "string_here"} //comment'
+```
 
 ```shell
 > minijson --help
@@ -37,21 +49,6 @@ dub build --config=executable --build=release-nobounds --compiler=ldc2
 Usage: minijson [--files FILES ...] [--comment] [--str STR ...] [--file FILE ...] [-h]
 
 minijson: minify json files with support for comments
-
-    # Minify the specified files
-    minijson ./dist/**/*.json ./build/a.json
-
-    # Minify the specified files (supports comments)
-    minijson --comment file1_with_comment.json file2_with_comment.json
-
-    # Minify the specified json string
-    minijson --str '{"some_json": "string_here"}'
-
-    # Minify the specified json string (supports comments)
-    minijson --comment --str '{"some_json": "string_here"} //comment'
-
-    More information at https://github.com/aminya/minijson
-
 
 Optional arguments:
   --files FILES ...
