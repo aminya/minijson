@@ -24,7 +24,7 @@
     "format": "prettier -l --cache --write . && pnpm run format.d",
     "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
     "lint": "eslint . --fix",
-    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/build.* && chmod +x ./dist/*/minijson",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/*.zip ./dist/build.* && chmod +x ./dist/*/minijson",
     "start.benchmark.node": "node ./benchmark/native-benchmark.mjs",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
@@ -32,7 +32,7 @@
     "test": "pnpm run build.node && jasmine ./test/index-test.mjs",
     "test.format": "prettier -l --cache . --check",
     "test.lint": "eslint .",
-    "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson"
+    "zip": "zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe && zip -9 -j ./dist/minijson-macos-x64.zip ./dist/darwin-x64/minijson && zip -9 -j ./dist/minijson-macos-arm64.zip ./dist/darwin-arm64/minijson && zip -9 -j ./dist/minijson-linux-x64.zip ./dist/linux-x64/minijson "
   },
   "prettier": "prettier-config-atomic",
   "dependencies": {
