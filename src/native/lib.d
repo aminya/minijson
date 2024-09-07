@@ -127,7 +127,7 @@ private bool notSlashAndNoSpaceOrBreak(const ref string str) @safe
 }
 
 /** Removes spaces from the original string */
-private string remove_spaces(string str) @trusted nothrow
+private string remove_spaces(string str) @trusted
 {
   static if (supports_sse4_1())
   {
@@ -140,8 +140,10 @@ private string remove_spaces(string str) @trusted nothrow
   }
   else
   {
+    import std.regex : replaceAll;
+
     const spaceOrBreakRegex = ctRegex!(`\s`);
-    str.replaceAll(spaceOrBreakRegex, "");
+    return str.replaceAll(spaceOrBreakRegex, "");
   }
 }
 
@@ -157,6 +159,8 @@ private bool hasNoSpace(const ref string str) @trusted
   }
   else
   {
+    import std.regex : matchFirst;
+
     const spaceOrBreakRegex = ctRegex!(`\s`);
     return str.matchFirst(spaceOrBreakRegex).empty();
   }
@@ -174,8 +178,8 @@ private bool hasNoSpace(const ref string str) @trusted
 */
 string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @trusted
 {
-  import std.algorithm: map;
-  import std.array: array;
+  import std.algorithm : map;
+  import std.array : array;
 
   return jsonStrings.map!(jsonString => minifyString(jsonString, hasComment)).array();
 }
