@@ -202,30 +202,27 @@ void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
   import std.stdio : writeln;
 
   // get the files from the given paths (resolve glob patterns)
-  auto files = paths
-    .map!((path) {
-      if (path.exists)
+  auto files = paths.map!((path) {
+    if (path.exists)
+    {
+      if (path.isFile)
       {
-        if (path.isFile)
-        {
-          return [path];
-        }
-        else if (path.isDir)
-        {
-          return glob(path ~ "/**/*.json");
-        }
-        else
-        {
-          throw new Exception("The given path is not a file or a directory: " ~ path);
-        }
+        return [path];
+      }
+      else if (path.isDir)
+      {
+        return glob(path ~ "/**/*.json");
       }
       else
       {
-        return glob(path);
+        throw new Exception("The given path is not a file or a directory: " ~ path);
       }
-    })
-    .joiner()
-    .array();
+    }
+    else
+    {
+      return glob(path);
+    }
+  }).joiner().array();
 
   foreach (file; files.parallel())
   {

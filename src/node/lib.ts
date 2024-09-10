@@ -12,35 +12,52 @@ import { join } from "path"
  * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
  */
 export async function minifyFiles(files: string[], hasComment = false): Promise<void> {
-  if (process.platform === "darwin" && process.arch === "arm64") {
-    // fallback to jasonminify due to missing ARM64 binaries
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const jsonminify = require("jsonminify")
-    await Promise.all(files.map(async (file) => {
+  try {
+    const filesNum = files.length
+    if (filesNum === 0) {
+      return Promise.resolve()
+    }
+
+    const minijsonArgs = hasComment ? ["--comment", ...files] : files
+
+    await spawnMinijson(minijsonArgs)
+  } catch (e) {
+    console.error(e, "Falling back to jsonminify")
+    await minifyFilesFallback(files)
+  }
+}
+
+/**
+ * Spawn minijson with the given arguments
+ *
+ * @param args An array of arguments
+ * @returns {Promise<string>} Returns a promise that resolves to stdout output string when the operation finishes
+ * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
+ */
+export function spawnMinijson(args: string[]): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    execFile(minijsonBin, args, (err, stdout, stderr) => {
+      if (err) {
+        reject(err)
+      }
+      if (stderr !== "") {
+        reject(stderr)
+      }
+      resolve(stdout)
+    })
+  })
+}
+
+async function minifyFilesFallback(files: string[]) {
+  const jsonminify = require("jsonminify")
+  await Promise.all(
+    files.map(async (file) => {
       const jsonString = await readFile(file, "utf8")
       const minifiedJsonString = jsonminify(jsonString) as string
       await writeFile(file, minifiedJsonString)
-    }))
-    return
-  }
-
-  const filesNum = files.length
-  if (filesNum === 0) {
-    return Promise.resolve()
-  }
-
-  const args = [...files]
-  const spliceUpper = 2 * filesNum - 2
-
-  for (let iSplice = 0; iSplice <= spliceUpper; iSplice += 2) {
-    args.splice(iSplice, 0, "--file")
-  }
-
-  if (hasComment) {
-    args.push("--comment")
-  }
-
-  await spawnMinijson(args)
+    }),
+  )
+  return
 }
 
 /**
@@ -68,25 +85,4 @@ const minijsonBin = join(__dirname, `${process.platform}-${process.arch}`, binNa
 // chmod as executable on non-windows
 if (process.platform !== "win32") {
   chmodSync(minijsonBin, 0o755)
-}
-
-/**
- * Spawn minijson with the given arguments
- *
- * @param args An array of arguments
- * @returns {Promise<string>} Returns a promise that resolves to stdout output string when the operation finishes
- * @throws {Promise<string | Error>} The promise is rejected with the reason for failure
- */
-export function spawnMinijson(args: string[]): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    execFile(minijsonBin, args, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
-      }
-      if (stderr !== "") {
-        reject(stderr)
-      }
-      resolve(stdout)
-    })
-  })
 }

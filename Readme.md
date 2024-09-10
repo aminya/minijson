@@ -24,8 +24,7 @@ dub build --config=executable --build=release-nobounds --compiler=ldc2
 ```
 
 - Download Native Binaries from
-https://github.com/aminya/minijson/releases/latest
-
+  https://github.com/aminya/minijson/releases/latest
 
 ### CLI Usage
 

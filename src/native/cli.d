@@ -3,8 +3,7 @@ module minijson.cli;
 import minijson.lib : minifyFiles, minifyStrings;
 import argparse;
 
-@(Command("minijson")
-    .Description(`minijson: minify json files with support for comments
+@(Command("minijson").Description(`minijson: minify json files with support for comments
 
     # Minify the specified files
     minijson ./dist/**/*.json ./build/a.json
@@ -19,8 +18,7 @@ import argparse;
     minijson --comment --str '{"some_json": "string_here"} //comment'
 
     More information at https://github.com/aminya/minijson
-  `)
-)
+  `))
 struct Options
 {
   bool comment = false;
