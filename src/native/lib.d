@@ -12,23 +12,24 @@ const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
   Params:
     jsonString  = the json string you want to minify
-    hasComment = a boolean to support comments in json. Default: `false`.
+    hasComment = a boolean to support comments in json. Default: `true`.
 
   Return:
     the minified json string
 */
-string minifyString(in string jsonString, in bool hasComment = false) @trusted
+string minifyString(in string jsonString, in bool hasComment = true) @trusted
+{
+  return hasComment ? minifyStringWithComments(jsonString) : minifyStringNoComments(jsonString);
+}
+
+string minifyStringNoComments(in string jsonString) @trusted
 {
   auto in_string = false;
-  auto in_multiline_comment = false;
-  auto in_singleline_comment = false;
   string result;
   size_t from = 0;
   auto rightContext = "";
 
-  const tokenizer = !hasComment ? tokenizerNoComment : tokenizerWithComment;
-
-  auto match = jsonString.matchAll(tokenizer);
+  auto match = jsonString.matchAll(tokenizerNoComment);
 
   while (!match.empty())
   {
@@ -40,10 +41,60 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     const prevFrom = from;
     from = jsonString.length - rightContext.length; // lastIndex
 
-    const notInComment = (!in_multiline_comment && !in_singleline_comment);
-    const noCommentOrNotInComment = !hasComment || notInComment;
+    auto leftContextSubstr = match.pre()[prevFrom .. $];
+    const noLeftContext = leftContextSubstr.length == 0;
+    if (!noLeftContext)
+    {
+      if (!in_string)
+      {
+        leftContextSubstr = remove_spaces(leftContextSubstr);
+      }
+      result ~= leftContextSubstr;
+    }
+    if (matchFrontHit == "\"")
+    {
+      if (!in_string || noLeftContext || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+      {
+        // start of string with ", or unescaped " character found to end string
+        in_string = !in_string;
+      }
+      --from; // include " character in next catch
+      rightContext = jsonString[from .. $];
+    }
+    else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
+    {
+      result ~= matchFrontHit;
+    }
+    match.popFront();
+  }
+  result ~= rightContext;
+  return result;
+}
 
-    if (noCommentOrNotInComment)
+string minifyStringWithComments(in string jsonString) @trusted
+{
+  auto in_string = false;
+  auto in_multiline_comment = false;
+  auto in_singleline_comment = false;
+  string result;
+  size_t from = 0;
+  auto rightContext = "";
+
+  auto match = jsonString.matchAll(tokenizerWithComment);
+
+  while (!match.empty())
+  {
+    const matchFrontHit = match.front().hit();
+
+    rightContext = match.post();
+
+    // update from for the next iteration
+    const prevFrom = from;
+    from = jsonString.length - rightContext.length; // lastIndex
+
+    const notInComment = !in_multiline_comment && !in_singleline_comment;
+
+    if (notInComment)
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
       const noLeftContext = leftContextSubstr.length == 0;
@@ -67,7 +118,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
       }
     }
     // comments
-    if (hasComment && !in_string)
+    if (!in_string)
     {
       if (notInComment)
       {
@@ -93,7 +144,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
         in_singleline_comment = false;
       }
     }
-    else if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
+    else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
       result ~= matchFrontHit;
     }
@@ -176,7 +227,7 @@ private bool hasNoSpace(const ref string str) @trusted
   Return:
     the minified json strings
 */
-string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @trusted
+string[] minifyStrings(in string[] jsonStrings, in bool hasComment = true) @trusted
 {
   import std.algorithm : map;
   import std.array : array;
@@ -191,7 +242,7 @@ string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @tru
     paths = the paths to the files. It could be glob patterns.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
+void minifyFiles(in string[] paths, in bool hasComment = true) @trusted
 {
   import std.parallelism : parallel;
   import std.algorithm;
@@ -202,33 +253,70 @@ void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
   import std.stdio : writeln;
 
   // get the files from the given paths (resolve glob patterns)
-  auto files = paths
-    .map!((path) {
-      if (path.exists)
+  auto files = paths.map!((path) {
+    if (path.exists)
+    {
+      if (path.isFile)
       {
-        if (path.isFile)
-        {
-          return [path];
-        }
-        else if (path.isDir)
-        {
-          return glob(path ~ "/**/*.json");
-        }
-        else
-        {
-          throw new Exception("The given path is not a file or a directory: " ~ path);
-        }
+        return [path];
+      }
+      else if (path.isDir)
+      {
+        return glob(path ~ "/**/*.json");
       }
       else
       {
-        return glob(path);
+        throw new Exception("The given path is not a file or a directory: " ~ path);
       }
-    })
-    .joiner()
-    .array();
+    }
+    else
+    {
+      return glob(path);
+    }
+  }).joiner().array();
+
+  if (files.empty)
+  {
+    writeln("No files found.");
+    return;
+  }
+
+  if (!confirmExtension(files))
+  {
+    return;
+  }
 
   foreach (file; files.parallel())
   {
     write(file, minifyString(readText(file), hasComment));
   }
+}
+
+bool confirmExtension(string[] files) @trusted
+{
+  auto confirmExtension = false;
+  import std.path : extension;
+
+  foreach (file; files)
+  {
+    // if the file extension is not json, jsonc, or json5, confirm before minifying
+    auto fileExtension = file.extension();
+    if (fileExtension != ".json" && fileExtension != ".jsonc" && fileExtension != ".json5")
+    {
+      if (!confirmExtension)
+      {
+        import std.stdio : readln, writeln;
+
+        writeln("The file ", file, " doesn't have a json extension. Do you want to minify it? (y/n)");
+        auto input = readln();
+        confirmExtension = input == "y";
+        if (!confirmExtension)
+        {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
