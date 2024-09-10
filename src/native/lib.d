@@ -224,8 +224,42 @@ void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
     }
   }).joiner().array();
 
+  if (!confirmExtension(files))
+  {
+    return;
+  }
+
   foreach (file; files.parallel())
   {
     write(file, minifyString(readText(file), hasComment));
   }
+}
+
+bool confirmExtension(string[] files) @trusted
+{
+  auto confirmExtension = false;
+  import std.path : extension;
+
+  foreach (file; files)
+  {
+    // if the file extension is not json, jsonc, or json5, confirm before minifying
+    auto fileExtension = file.extension();
+    if (fileExtension != ".json" && fileExtension != ".jsonc" && fileExtension != ".json5")
+    {
+      if (!confirmExtension)
+      {
+        import std.stdio : readln, writeln;
+
+        writeln("The file ", file, " doesn't have a json extension. Do you want to minify it? (y/n)");
+        auto input = readln();
+        confirmExtension = input == "y";
+        if (!confirmExtension)
+        {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
