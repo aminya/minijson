@@ -39,7 +39,6 @@ jobs:
             ~/.pnpm-store
             D:\.pnpm-store
             ./.dub
-            ~/llvm
           key: "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-CXX:${{ matrix.compiler }}-${{ hashFiles('./dub.selections.json', './pnpm-lock.yaml')}} }}"
           restore-keys: |
             "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-CXX:${{ matrix.compiler }}-"
@@ -71,7 +70,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Setup Pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ matrix.pnpm }}
 
@@ -114,6 +113,7 @@ jobs:
           tar -czf ./dist/minijson-macos-x64.tar.gz -C ./dist/darwin-x64 minijson
           tar -czf ./dist/minijson-macos-arm64.tar.gz -C ./dist/darwin-arm64 minijson
           tar -czf ./dist/minijson-linux-x64.tar.gz -C ./dist/linux-x64 minijson
+          ls -l ./dist
 
       - name: Draft the release
         if: startsWith(github.ref, 'refs/tags/')
@@ -130,4 +130,6 @@ jobs:
 
       - name: Publish to npm
         if: startsWith(github.ref, 'refs/tags/')
-        run: pnpm publish --access public
+        run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
