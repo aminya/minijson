@@ -36,8 +36,10 @@ jobs:
           path: |
             ~/.dub
             ~/AppData/Local/dub
+            ~/.pnpm
             ~/.pnpm-store
             D:\.pnpm-store
+            D:\.pnpm
             ./.dub
           key: "cache-OS:${{ matrix.os }}-D:${{ matrix.d }}-CXX:${{ matrix.compiler }}-${{ hashFiles('./dub.selections.json', './pnpm-lock.yaml')}} }}"
           restore-keys: |
@@ -90,10 +92,18 @@ jobs:
         with:
           name: minijson-${{ runner.os }}-${{ runner.arch }}
           path: ./dist
+          retention-days: 1
 
   Release:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        node:
+          - 20
+        pnpm:
+          - 9
     steps:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -106,7 +116,7 @@ jobs:
           name: merged-artifacts
           path: dist/
 
-      - name: Prepare
+      - name: Prepare Dist
         run: |
           chmod +x ./dist/*/minijson
           zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe
@@ -116,7 +126,6 @@ jobs:
           ls -l ./dist
 
       - name: Draft the release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -128,8 +137,22 @@ jobs:
             dist/minijson-macos-arm64.tar.gz
             dist/minijson-linux-x64.tar.gz
 
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ matrix.pnpm }}
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Publish to npm
-        if: startsWith(github.ref, 'refs/tags/')
-        run: pnpm publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

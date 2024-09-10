@@ -7,7 +7,9 @@
   "author": "Amin Yahyaabdi",
   "main": "./dist/lib.js",
   "browser": "./dist/index.html",
-  "bin": "./dist/cli.js",
+  "bin": {
+    "minijson": "dist/cli.js"
+  },
   "files": [
     "dist/**/*"
   ],
@@ -24,7 +26,7 @@
     "format": "prettier -l --cache --write . && pnpm run format.d",
     "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
     "lint": "eslint . --fix",
-    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/*.zip ./dist/*.tar.* ./dist/build.* && chmod +x ./dist/*/minijson",
+    "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/*.zip ./dist/*.tar.* ./dist/build.*",
     "start.benchmark.js": "node ./benchmark/js-benchmark.mjs",
     "start.benchmark.node": "node ./benchmark/native-benchmark.mjs",
     "start.browser": "servor ./dist/ --browse --reload",
