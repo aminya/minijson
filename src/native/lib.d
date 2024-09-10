@@ -19,16 +19,17 @@ const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 */
 string minifyString(in string jsonString, in bool hasComment = false) @trusted
 {
+  return hasComment ? minifyStringWithComments(jsonString) : minifyStringNoComments(jsonString);
+}
+
+string minifyStringNoComments(in string jsonString) @trusted
+{
   auto in_string = false;
-  auto in_multiline_comment = false;
-  auto in_singleline_comment = false;
   string result;
   size_t from = 0;
   auto rightContext = "";
 
-  const tokenizer = !hasComment ? tokenizerNoComment : tokenizerWithComment;
-
-  auto match = jsonString.matchAll(tokenizer);
+  auto match = jsonString.matchAll(tokenizerNoComment);
 
   while (!match.empty())
   {
@@ -40,10 +41,60 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
     const prevFrom = from;
     from = jsonString.length - rightContext.length; // lastIndex
 
-    const notInComment = (!in_multiline_comment && !in_singleline_comment);
-    const noCommentOrNotInComment = !hasComment || notInComment;
+    auto leftContextSubstr = match.pre()[prevFrom .. $];
+    const noLeftContext = leftContextSubstr.length == 0;
+    if (!noLeftContext)
+    {
+      if (!in_string)
+      {
+        leftContextSubstr = remove_spaces(leftContextSubstr);
+      }
+      result ~= leftContextSubstr;
+    }
+    if (matchFrontHit == "\"")
+    {
+      if (!in_string || noLeftContext || hasNoSlashOrEvenNumberOfSlashes(leftContextSubstr))
+      {
+        // start of string with ", or unescaped " character found to end string
+        in_string = !in_string;
+      }
+      --from; // include " character in next catch
+      rightContext = jsonString[from .. $];
+    }
+    else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
+    {
+      result ~= matchFrontHit;
+    }
+    match.popFront();
+  }
+  result ~= rightContext;
+  return result;
+}
 
-    if (noCommentOrNotInComment)
+string minifyStringWithComments(in string jsonString) @trusted
+{
+  auto in_string = false;
+  auto in_multiline_comment = false;
+  auto in_singleline_comment = false;
+  string result;
+  size_t from = 0;
+  auto rightContext = "";
+
+  auto match = jsonString.matchAll(tokenizerWithComment);
+
+  while (!match.empty())
+  {
+    const matchFrontHit = match.front().hit();
+
+    rightContext = match.post();
+
+    // update from for the next iteration
+    const prevFrom = from;
+    from = jsonString.length - rightContext.length; // lastIndex
+
+    const notInComment = !in_multiline_comment && !in_singleline_comment;
+
+    if (notInComment)
     {
       auto leftContextSubstr = match.pre()[prevFrom .. $];
       const noLeftContext = leftContextSubstr.length == 0;
@@ -67,7 +118,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
       }
     }
     // comments
-    if (hasComment && !in_string)
+    if (!in_string)
     {
       if (notInComment)
       {
@@ -93,7 +144,7 @@ string minifyString(in string jsonString, in bool hasComment = false) @trusted
         in_singleline_comment = false;
       }
     }
-    else if (!hasComment && notSlashAndNoSpaceOrBreak(matchFrontHit))
+    else if (notSlashAndNoSpaceOrBreak(matchFrontHit))
     {
       result ~= matchFrontHit;
     }

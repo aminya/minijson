@@ -25,6 +25,7 @@
     "format.d": "dub run --build=release --quiet dfmt -- --soft_max_line_length 110 --indent_size 2 --inplace ./src ./benchmark",
     "lint": "eslint . --fix",
     "prepublishOnly": "shx rm -rf ./dist/tsconfig.tsbuildinfo ./dist/*.zip ./dist/build.* && chmod +x ./dist/*/minijson",
+    "start.benchmark.js": "node ./benchmark/js-benchmark.mjs",
     "start.benchmark.node": "node ./benchmark/native-benchmark.mjs",
     "start.browser": "servor ./dist/ --browse --reload",
     "start.node": "node ./dist/node/cli.js",
