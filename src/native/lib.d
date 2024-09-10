@@ -224,6 +224,12 @@ void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
     }
   }).joiner().array();
 
+  if (files.empty)
+  {
+    writeln("No files found.");
+    return;
+  }
+
   if (!confirmExtension(files))
   {
     return;
