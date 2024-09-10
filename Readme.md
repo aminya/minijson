@@ -1,8 +1,8 @@
 # minijson
 
-Minify JSON files **blazing fast**! Supports Comments. Uses D, C, and AVX2 and SSE4_1 SIMD.
+Minify JSON files blazing fast, removing comments/whitespace.
 
-4180 times faster than jsonminify!
+Uses D, C, and AVX2 and SSE4_1 SIMD. 4180 times faster than jsonminify!
 
 [![CI](https://github.com/aminya/minijson/actions/workflows/CI.yml/badge.svg)](https://github.com/aminya/minijson/actions/workflows/CI.yml)
 
