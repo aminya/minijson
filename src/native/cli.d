@@ -7,21 +7,20 @@ import argparse;
 
     # Minify the specified files
     minijson ./dist/**/*.json ./build/a.json
+    minijson file1_with_comment.json file2_with_comment.json
 
-    # Minify the specified files (supports comments)
-    minijson --comment file1_with_comment.json file2_with_comment.json
+    # Minify the specified files and disable comment support for faster minification
+    minijson --comment=false file1_no_comment.json file2_no_comment.json
 
     # Minify the specified json string
     minijson --str '{"some_json": "string_here"}'
-
-    # Minify the specified json string (supports comments)
-    minijson --comment --str '{"some_json": "string_here"} //comment'
+    minijson --str '{"some_json": "string_here"} //comment'
 
     More information at https://github.com/aminya/minijson
   `))
 struct Options
 {
-  bool comment = false;
+  bool comment = true;
   string[] str;
   // (Deprecated) A list of files to minify (for backwards compatiblitity with getopt)
   string[] file;

@@ -7,12 +7,12 @@ import minijson.lib : minifyString;
 
   Params:
     jsonString  = the json string you want to minify
-    hasComment = a boolean to support comments in json. Default: `false`.
+    hasComment = a boolean to support comments in json. Default: `true`.
 
   Return:
     the minified json string
 */
-extern (C) auto c_minifyString(char* jsonCString, bool hasComment = false)
+extern (C) auto c_minifyString(char* jsonCString, bool hasComment = true)
 {
   import std : fromStringz, toStringz;
 

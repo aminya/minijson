@@ -12,12 +12,12 @@ const tokenizerNoComment = ctRegex!(`[\n\r"[]]`, "g");
 
   Params:
     jsonString  = the json string you want to minify
-    hasComment = a boolean to support comments in json. Default: `false`.
+    hasComment = a boolean to support comments in json. Default: `true`.
 
   Return:
     the minified json string
 */
-string minifyString(in string jsonString, in bool hasComment = false) @trusted
+string minifyString(in string jsonString, in bool hasComment = true) @trusted
 {
   return hasComment ? minifyStringWithComments(jsonString) : minifyStringNoComments(jsonString);
 }
@@ -227,7 +227,7 @@ private bool hasNoSpace(const ref string str) @trusted
   Return:
     the minified json strings
 */
-string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @trusted
+string[] minifyStrings(in string[] jsonStrings, in bool hasComment = true) @trusted
 {
   import std.algorithm : map;
   import std.array : array;
@@ -242,7 +242,7 @@ string[] minifyStrings(in string[] jsonStrings, in bool hasComment = false) @tru
     paths = the paths to the files. It could be glob patterns.
     hasComment = a boolean to support comments in json. Default: `false`.
 */
-void minifyFiles(in string[] paths, in bool hasComment = false) @trusted
+void minifyFiles(in string[] paths, in bool hasComment = true) @trusted
 {
   import std.parallelism : parallel;
   import std.algorithm;
