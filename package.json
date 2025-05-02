@@ -96,6 +96,7 @@
     "rust",
     "bandwith"
   ],
+  "packageManager": "pnpm@10.10.0",
   "targets": {
     "browser": {
       "context": "browser",

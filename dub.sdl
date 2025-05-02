@@ -9,10 +9,10 @@ targetPath "./dist"
 sourcePaths "./src/native"
 importPaths "./src/native"
 
-dependency "automem" version="0.6.7"
+dependency "automem" version="0.6.11"
 dependency "despacer" path="despacer"
-dependency "d-glob" version="~>0.4.0"
-dependency "argparse" version="~>1.3.0"
+dependency "d-glob" version="~>0.5.0"
+dependency "argparse" version="~>1.4.1"
 
 preGenerateCommands "git submodule update --init" # despacer download
 
