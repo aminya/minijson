@@ -13,13 +13,15 @@ jobs:
         os:
           - windows-2019
           - ubuntu-22.04
-          - macos-13 # x86
         d:
           - "ldc-latest"
         compiler:
           - llvm-19
         include:
           - os: macos-14 # arm64
+            d: "ldc-latest"
+            compiler: "appleclang"
+          - os: macos-13 # x86
             d: "ldc-latest"
             compiler: "appleclang"
 
@@ -88,12 +90,6 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: build
-    strategy:
-      matrix:
-        node:
-          - 20
-        pnpm:
-          - 9
     steps:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -132,12 +128,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version-file: ".nvmrc"
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: ${{ matrix.pnpm }}
 
       - name: Install dependencies
         run: pnpm install
