@@ -3,6 +3,10 @@
   "version": "1.1.2",
   "description": "Minify JSON files blazing fast, removing comments/whitespace.",
   "homepage": "https://github.com/aminya/minijson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aminya/minijson.git"
+  },
   "license": "MIT",
   "author": "Amin Yahyaabdi",
   "main": "./dist/lib.js",
