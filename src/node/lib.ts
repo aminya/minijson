@@ -35,6 +35,9 @@ export async function minifyFiles(files: readonly string[], hasComment = true): 
 export function spawnMinijson(args: string[]): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     execFile(minijsonBin, args, (err, stdout, stderr) => {
+      console.error(stderr)
+      console.log(stdout)
+
       if (err) {
         reject(err)
       }
