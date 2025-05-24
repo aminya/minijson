@@ -106,7 +106,7 @@ jobs:
           path: dist/
 
       - name: Prepare Dist
-        run: |
+        run: | #shell
           chmod +x ./dist/*/minijson
           zip -9 -j ./dist/minijson-windows-x64.zip ./dist/win32-x64/minijson.exe
           tar -czf ./dist/minijson-macos-x64.tar.gz -C ./dist/darwin-x64 minijson
@@ -126,6 +126,11 @@ jobs:
             dist/minijson-macos-arm64.tar.gz
             dist/minijson-linux-x64.tar.gz
 
+      - name: Clean up dist
+        run: | #shell
+          rm -rf ./dist/*.tar.gz ./dist/*.zip
+          ls -l ./dist
+
       - uses: actions/checkout@v4
 
       - name: Setup Node
@@ -141,6 +146,6 @@ jobs:
         run: pnpm install
 
       - name: Publish to npm
-        run: npm publish --provenance --access public
+        run: pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
