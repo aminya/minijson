@@ -94,6 +94,20 @@ jobs:
       contents: write
       id-token: write
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
@@ -135,21 +149,7 @@ jobs:
           test -f ./dist/linux-x64/minijson || exit 1
           test -f ./dist/win32-x64/minijson.exe || exit 1
 
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Publish to npm
-        run: pnpm publish --provenance --access public --no-git-checks
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
