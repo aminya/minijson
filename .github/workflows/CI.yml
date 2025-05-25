@@ -130,6 +130,10 @@ jobs:
         run: | #shell
           rm -rf ./dist/*.tar.gz ./dist/*.zip
           ls -l ./dist
+          test -f ./dist/darwin-arm64/minijson || exit 1
+          test -f ./dist/darwin-x64/minijson || exit 1
+          test -f ./dist/linux-x64/minijson || exit 1
+          test -f ./dist/win32-x64/minijson.exe || exit 1
 
       - uses: actions/checkout@v4
 
@@ -146,6 +150,6 @@ jobs:
         run: pnpm install
 
       - name: Publish to npm
-        run: pnpm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
