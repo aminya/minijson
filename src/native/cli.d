@@ -22,7 +22,7 @@ struct Options
 {
   bool comment = true;
   string[] str;
-  // (Deprecated) A list of files to minify (for backwards compatiblitity with getopt)
+  // (Deprecated) A list of files to minify (for backwards compatibility with getopt)
   string[] file;
 }
 

@@ -16,14 +16,14 @@ jobs:
         d:
           - "ldc-latest"
         compiler:
-          - llvm-15
+          - llvm-20
         include:
           - os: macos-14 # arm64
             d: "ldc-latest"
-            compiler: "llvm-15"
+            compiler: "llvm-20"
           - os: macos-13 # x86
             d: "ldc-latest"
-            compiler: "llvm-15"
+            compiler: "llvm-20"
 
     steps:
       - uses: actions/checkout@v4
